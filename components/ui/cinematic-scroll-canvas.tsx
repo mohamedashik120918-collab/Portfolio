@@ -44,7 +44,7 @@ export default function CinematicScrollCanvas() {
         overflow: "hidden",
         zIndex: 0,
         pointerEvents: "none",
-        backgroundColor: "#0d0607",
+        backgroundColor: "#0d0204",
       }}
       aria-hidden="true"
     >
@@ -53,6 +53,9 @@ export default function CinematicScrollCanvas() {
         ref={imgRef}
         src="/site-bg.png"
         alt="Portfolio Whole Website Background"
+        decoding="sync"
+        loading="eager"
+        fetchPriority="high"
         style={{
           width: "100%",
           height: "100%",
@@ -62,17 +65,6 @@ export default function CinematicScrollCanvas() {
           willChange: "transform",
           display: "block",
           imageRendering: "auto",
-        }}
-      />
-
-      {/* Subtle atmospheric vignette: lets the vibrant artwork shine while keeping portfolio text high-contrast & readable */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background:
-            "radial-gradient(ellipse at 50% 50%, rgba(10, 4, 5, 0.2) 0%, rgba(10, 4, 5, 0.45) 70%, rgba(10, 4, 5, 0.72) 100%)",
-          pointerEvents: "none",
         }}
       />
     </div>

@@ -14,7 +14,6 @@ const NAV_ITEMS: NavItem[] = [
   { name: "AWARDS & CERTIFICATIONS", href: "#awards", id: "awards" },
   { name: "SKILLS", href: "#skills", id: "skills" },
   { name: "EXPERIENCE", href: "#experience", id: "experience" },
-  { name: "GALLERY", href: "#gallery", id: "gallery" },
   { name: "CONTACT", href: "#contact", id: "contact" },
 ];
 
@@ -64,7 +63,7 @@ export default function GlassNav() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center p-3 sm:p-5 pointer-events-none">
       <div
-        className={`pointer-events-auto flex items-center justify-between gap-4 px-5 sm:px-7 py-2 sm:py-2.5 rounded-full transition-all duration-300 max-w-[1380px] w-full ${scrolled
+        className={`pointer-events-auto flex items-center justify-between gap-4 px-5 sm:px-8 py-2 sm:py-2.5 rounded-full transition-all duration-300 w-full max-w-[96vw] 2xl:max-w-[95vw] ${scrolled
             ? "bg-[#0a0305]/90 border border-[#ff1e2d]/30 shadow-[0_15px_35px_rgba(0,0,0,0.85),0_0_20px_rgba(255,30,45,0.15)] backdrop-blur-xl"
             : "bg-[#0c0406]/80 border border-[#2a0e13] shadow-[0_10px_30px_rgba(0,0,0,0.7)] backdrop-blur-md"
           }`}

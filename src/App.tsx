@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import CinematicScrollCanvas from "@/components/ui/cinematic-scroll-canvas";
 import LanyardIdCard from "@/components/ui/lanyard-id-card";
 import GlassNav from "@/components/ui/glass-nav";
@@ -20,6 +20,7 @@ import {
   Sparkles,
   CheckCircle2,
   Terminal,
+  ChevronLeft,
   ChevronRight,
   Bot,
   Globe,
@@ -27,8 +28,6 @@ import {
   FileText,
   MapPin,
   Calendar,
-  Eye,
-  X,
   MessageCircle,
   Phone
 } from "lucide-react";
@@ -255,57 +254,142 @@ const AWARDS = [
   },
 ];
 
-// Editorial Gallery Items
-const GALLERY_ITEMS = [
-  {
-    title: "Executive Studio Portrait",
-    subtitle: "Studio Lighting / Section 1",
-    src: "/portraits/section1.jpg",
-    aspect: "3:4",
-    desc: "Front-facing luxury editorial studio portrait with deep crimson neon edge illumination.",
-  },
-  {
-    title: "Telephoto Vision Zoom",
-    subtitle: "Direct Focus / Section 2",
-    src: "/portraits/section2.jpg",
-    aspect: "3:4",
-    desc: "Slight zoom-in framing capturing intense, visionary focus and sculptural cheekbone rim light.",
-  },
-  {
-    title: "Designer Shades & Reflections",
-    subtitle: "Cyber-Chic / Section 3",
-    src: "/portraits/section3.jpg",
-    aspect: "3:4",
-    desc: "Stylized dark sunglasses reflecting crimson laser light streaks in a high-fashion editorial pose.",
-  },
-  {
-    title: "Architectural Side Profile",
-    subtitle: "Three-Quarter View / Section 4",
-    src: "/portraits/section4.jpg",
-    aspect: "3:4",
-    desc: "Side profile silhouette illuminated with intense crimson neon contouring against deep shadow.",
-  },
-  {
-    title: "Macro Vision Close-Up",
-    subtitle: "Cinematic Intensity / Section 5",
-    src: "/portraits/section5.jpg",
-    aspect: "1:1",
-    desc: "Extreme close-up framing highlighting determined gaze, razor-sharp eye catchlight, and warmth.",
-  },
-  {
-    title: "Cybernetic Hologram Stylized",
-    subtitle: "Avant-Garde Art / Section 6",
-    src: "/portraits/section6.jpg",
-    aspect: "1:1",
-    desc: "Futuristic artistic portrait featuring glowing crimson wireframe light trails and digital particle dust.",
-  },
-];
+// Interactive Spider-Web Timeline Anchor Component
+function SpiderWebAnchor({ isCurrent = false }: { isCurrent?: boolean }) {
+  return (
+    <div className="absolute -left-7 sm:-left-10 md:-left-14 top-1.5 w-7 sm:w-10 md:w-14 h-24 pointer-events-none z-20 overflow-visible">
+      <svg
+        viewBox="0 0 56 80"
+        className="w-full h-full overflow-visible"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        {/* Radial Web Silk Tension Strands (Holding and clamping onto the card) */}
+        <path
+          d="M 0 16 Q 22 8, 56 4"
+          className="stroke-[#ff1e2d]/60 group-hover:stroke-[#ff1e2d] transition-colors duration-300"
+          strokeWidth="1.2"
+          vectorEffect="non-scaling-stroke"
+        />
+        <path
+          d="M 0 16 Q 26 14, 56 16"
+          className="stroke-white/80 group-hover:stroke-white transition-colors duration-300"
+          strokeWidth="1.4"
+          vectorEffect="non-scaling-stroke"
+        />
+        <path
+          d="M 0 16 Q 28 26, 56 38"
+          className="stroke-[#ff1e2d]/60 group-hover:stroke-[#ff1e2d] transition-colors duration-300"
+          strokeWidth="1.2"
+          vectorEffect="non-scaling-stroke"
+        />
+        <path
+          d="M 0 16 Q 24 44, 56 66"
+          className="stroke-[#ff1e2d]/40 group-hover:stroke-[#ff1e2d]/80 transition-colors duration-300"
+          strokeWidth="1"
+          vectorEffect="non-scaling-stroke"
+        />
+
+        {/* Concentric Spider-Web Arcs (Authentic web lattice weave) */}
+        <path
+          d="M 14 13 Q 18 19, 14 24"
+          className="stroke-[#ff4d5a]/50 group-hover:stroke-[#ff1e2d] transition-colors duration-300"
+          strokeWidth="0.9"
+          vectorEffect="non-scaling-stroke"
+        />
+        <path
+          d="M 28 10 Q 38 21, 30 35"
+          className="stroke-white/50 group-hover:stroke-white/90 transition-colors duration-300"
+          strokeWidth="0.9"
+          vectorEffect="non-scaling-stroke"
+        />
+        <path
+          d="M 42 7 Q 54 23, 44 52"
+          className="stroke-[#ff4d5a]/60 group-hover:stroke-[#ff1e2d] transition-colors duration-300"
+          strokeWidth="1"
+          vectorEffect="non-scaling-stroke"
+        />
+
+        {/* Silk Corner Anchor Clamp wrapping onto the Card Corner */}
+        <path
+          d="M 52 10 L 58 16 L 52 22"
+          className="stroke-[#ff1e2d] group-hover:stroke-white transition-colors duration-300"
+          strokeWidth="1.5"
+          fill="none"
+          vectorEffect="non-scaling-stroke"
+        />
+
+        {/* Central Web Silk Knot / Spinneret Hub on Main Line */}
+        <circle
+          cx="0"
+          cy="16"
+          r="10"
+          className="fill-[#ff1e2d]/25 group-hover:fill-[#ff1e2d]/50 transition-all duration-300 animate-pulse"
+        />
+        <circle
+          cx="0"
+          cy="16"
+          r="4.5"
+          className={isCurrent ? "fill-[#ff1e2d] stroke-white" : "fill-[#ff1e2d]/90 stroke-[#0a0404]"}
+          strokeWidth="1.5"
+          style={{ filter: "drop-shadow(0 0 8px #ff1e2d)" }}
+        />
+        <circle cx="-1" cy="15" r="1.5" fill="#ffffff" />
+
+        {/* Hanging Spider on Silk Thread (For current internship / active item) */}
+        {isCurrent && (
+          <g className="animate-spider-sway origin-[0px_16px]">
+            {/* Hanging vertical silk line */}
+            <line
+              x1="0"
+              y1="16"
+              x2="0"
+              y2="42"
+              stroke="#ffffff"
+              strokeWidth="0.9"
+              strokeDasharray="2 1"
+              opacity="0.85"
+            />
+            {/* Minimalist Spider Motif */}
+            <g transform="translate(0, 44)">
+              <ellipse cx="0" cy="0" rx="3.5" ry="4.5" fill="#ff1e2d" style={{ filter: "drop-shadow(0 0 6px #ff1e2d)" }} />
+              <circle cx="0" cy="-3.5" r="2" fill="#ffffff" />
+              <circle cx="-0.8" cy="-4" r="0.5" fill="#000000" />
+              <circle cx="0.8" cy="-4" r="0.5" fill="#000000" />
+              {/* Spider Legs */}
+              <path d="M -2 -2 Q -6 -5 -7 -1" stroke="#ff1e2d" strokeWidth="0.8" fill="none" />
+              <path d="M -3 0 Q -8 0 -8 4" stroke="#ff1e2d" strokeWidth="0.8" fill="none" />
+              <path d="M -2 2 Q -7 4 -6 8" stroke="#ff1e2d" strokeWidth="0.8" fill="none" />
+              <path d="M -1 3 Q -5 7 -4 10" stroke="#ff1e2d" strokeWidth="0.8" fill="none" />
+              <path d="M 2 -2 Q 6 -5 7 -1" stroke="#ff1e2d" strokeWidth="0.8" fill="none" />
+              <path d="M 3 0 Q 8 0 8 4" stroke="#ff1e2d" strokeWidth="0.8" fill="none" />
+              <path d="M 2 2 Q 7 4 6 8" stroke="#ff1e2d" strokeWidth="0.8" fill="none" />
+              <path d="M 1 3 Q 5 7 4 10" stroke="#ff1e2d" strokeWidth="0.8" fill="none" />
+            </g>
+          </g>
+        )}
+      </svg>
+    </div>
+  );
+}
+
+function SpiderWebCardWatermark() {
+  return (
+    <div className="absolute -top-3 -left-3 w-16 h-16 pointer-events-none opacity-20 group-hover:opacity-45 transition-opacity duration-300 z-0">
+      <svg viewBox="0 0 60 60" fill="none" className="w-full h-full stroke-[#ff1e2d]">
+        <path d="M 0 0 L 52 0 M 0 0 L 0 52 M 0 0 L 38 38" strokeWidth="0.9" />
+        <path d="M 14 0 Q 14 14 0 14" strokeWidth="0.8" />
+        <path d="M 28 0 Q 28 28 0 28" strokeWidth="0.8" />
+        <path d="M 42 0 Q 42 42 0 42" strokeWidth="0.8" />
+      </svg>
+    </div>
+  );
+}
 
 export default function App() {
   const [introPhase, setIntroPhase] = useState<"show" | "exit" | "done">("show");
   const [introProgress, setIntroProgress] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
-  const [galleryModal, setGalleryModal] = useState<typeof GALLERY_ITEMS[0] | null>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [contactForm, setContactForm] = useState({
     name: "",
@@ -367,6 +451,41 @@ export default function App() {
     selectedCategory === "All"
       ? PROJECTS
       : PROJECTS.filter((p) => p.category === selectedCategory);
+
+  // Horizontal Project Slider State & Handlers
+  const projectSliderRef = useRef<HTMLDivElement>(null);
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(true);
+  const [activeProjectIdx, setActiveProjectIdx] = useState(0);
+
+  const checkProjectScroll = () => {
+    const el = projectSliderRef.current;
+    if (!el) return;
+    setCanScrollPrev(el.scrollLeft > 15);
+    setCanScrollNext(el.scrollLeft + el.clientWidth < el.scrollWidth - 15);
+
+    const card = el.querySelector(".project-slide-card") as HTMLElement | null;
+    const cardW = card ? card.offsetWidth + 24 : 380;
+    const idx = Math.round(el.scrollLeft / cardW);
+    setActiveProjectIdx(Math.min(filteredProjects.length - 1, Math.max(0, idx)));
+  };
+
+  const scrollProjectSlider = (direction: "left" | "right") => {
+    const el = projectSliderRef.current;
+    if (!el) return;
+    const card = el.querySelector(".project-slide-card") as HTMLElement | null;
+    const cardW = card ? card.offsetWidth + 24 : 380;
+    const delta = direction === "left" ? -cardW : cardW;
+    el.scrollBy({ left: delta, behavior: "smooth" });
+  };
+
+  const scrollToProjectSlide = (index: number) => {
+    const el = projectSliderRef.current;
+    if (!el) return;
+    const card = el.querySelector(".project-slide-card") as HTMLElement | null;
+    const cardW = card ? card.offsetWidth + 24 : 380;
+    el.scrollTo({ left: index * cardW, behavior: "smooth" });
+  };
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -505,9 +624,9 @@ export default function App() {
             ========================================================================= */}
         <section
           id="top"
-          className="relative min-h-screen flex items-start justify-center pt-20 sm:pt-24 lg:pt-20 pb-16 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16"
+          className="relative min-h-screen flex items-start justify-center pt-20 sm:pt-24 lg:pt-20 pb-16 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-28"
         >
-          <div className="max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-start">
+          <div className="w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 xl:gap-16 items-start">
             {/* Left Hero Content with Exact Font Styles and Sizes - Generous space above Hello I'm */}
             <div className="lg:col-span-7 flex flex-col items-start z-20 relative pt-24 sm:pt-32 lg:pt-48 xl:pt-56">
               {/* Hollow Background Watermark: ASHIK */}
@@ -583,8 +702,8 @@ export default function App() {
                     className="text-4xl sm:text-5xl font-black text-[#ff1e2d] tracking-tight leading-[0.82] text-left group-hover:scale-105 transition-transform select-none"
                     style={{ fontFamily: "'Bebas Neue', sans-serif" }}
                   >
-                    <div>FINAL</div>
-                    <div>YR</div>
+                    <div>GRADUATE</div>
+                    <div></div>
                   </div>
                   <div className="text-[11px] sm:text-[12px] font-bold uppercase tracking-wider text-zinc-300 leading-tight text-left">
                     <div>B.SC CS @</div>
@@ -635,16 +754,11 @@ export default function App() {
             ========================================================================= */}
         <section
           id="services"
-          className="relative pt-8 sm:pt-10 pb-16 sm:pb-24 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden bg-[#060203]"
+          className="relative pt-8 sm:pt-10 pb-16 sm:pb-24 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-28"
           data-reveal
         >
-          {/* Ambient red atmospheric glow across the whole width matching reference */}
-          <div className="absolute inset-0 pointer-events-none z-0">
-            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[600px] bg-[radial-gradient(ellipse_at_center,rgba(220,20,35,0.28)_0%,rgba(140,10,20,0.12)_45%,transparent_70%)] filter blur-2xl" />
-          </div>
-
           {/* Header Bar: Red Square + WHAT I DO & Full-width Divider Line */}
-          <div className="max-w-[1400px] mx-auto relative z-20 mb-1">
+          <div className="w-full mx-auto relative z-20 mb-8 sm:mb-10">
             <div className="flex items-center gap-2.5 text-xs sm:text-[13px] font-mono font-bold tracking-[0.2em] text-white uppercase mb-3">
               <span className="w-2.5 h-2.5 bg-[#ff1e2d] rounded-xs inline-block shadow-[0_0_10px_#ff1e2d]" />
               <span>WHAT I DO</span>
@@ -652,24 +766,8 @@ export default function App() {
             <div className="w-full h-px bg-white/10" />
           </div>
 
-          {/* Stage Container: Background Portrait + 5 Overlaid Cards */}
-          <div className="max-w-[1400px] mx-auto relative z-10">
-            {/* Exact Background Portrait: Mohamed in Sunglasses with Red Rim Lighting (section3.jpg) */}
-            <div className="absolute inset-x-0 -top-6 sm:-top-8 flex items-start justify-center pointer-events-none overflow-hidden z-0">
-              <img
-                // src="/portraits/section3.jpg"
-                alt="Mohamed Ashik in Sunglasses"
-                className="w-full max-w-[860px] lg:max-w-[960px] xl:max-w-[1040px] h-[580px] sm:h-[640px] md:h-[720px] lg:h-[760px] object-cover object-[50%_24%] filter contrast-120 brightness-100 opacity-95"
-              />
-              {/* Vignettes to seamlessly dissolve edges into the section background */}
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,transparent_45%,#060203_85%)] pointer-events-none" />
-              <div className="absolute inset-y-0 left-0 w-32 sm:w-64 bg-gradient-to-r from-[#060203] via-[#060203]/70 to-transparent pointer-events-none" />
-              <div className="absolute inset-y-0 right-0 w-32 sm:w-64 bg-gradient-to-l from-[#060203] via-[#060203]/70 to-transparent pointer-events-none" />
-              <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-[#060203] via-[#060203]/80 to-transparent pointer-events-none" />
-            </div>
-
-            {/* Precise spacer so hair, sunglasses, nose and red rim-light portrait are visible above cards */}
-            <div className="h-44 sm:h-52 md:h-60 lg:h-64" />
+          {/* Stage Container: 5 Overlaid Cards */}
+          <div className="w-full mx-auto relative z-10">
 
             {/* Exact 5-Card Row from Reference Image */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4 xl:gap-5 items-stretch relative z-10">
@@ -700,11 +798,11 @@ export default function App() {
         <div className="section-seam" />
 
         {/* =========================================================================
-            PROJECTS SECTION (MASONRY GRID)
+            PROJECTS SECTION (HORIZONTAL SLIDER)
             ========================================================================= */}
-        <section id="projects" className="py-16 sm:py-20 lg:py-28 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16" data-reveal>
-          <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 sm:mb-12 gap-6">
+        <section id="projects" className="py-16 sm:py-20 lg:py-28 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-28" data-reveal>
+          <div className="w-full mx-auto">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-10 gap-6">
               <div>
                 <div className="section-kicker">
                   <i /> SELECTED WORKS
@@ -714,115 +812,170 @@ export default function App() {
                 </h2>
               </div>
 
-              {/* Category Filter Tabs */}
-              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 p-1.5 rounded-full bg-black/60 border border-white/10 backdrop-blur-md">
-                {["All", "Full Stack", "AI & CV", "Mobile & IoT"].map((cat) => (
+              {/* Slider Controls & Counter */}
+              <div className="flex items-center gap-4 self-end sm:self-auto">
+                {/* Counter Badge */}
+                <div className="px-3.5 py-1.5 rounded-full bg-black/70 border border-white/10 text-xs font-mono text-zinc-400 flex items-center gap-1.5 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                  <span className="text-[#ff1e2d] font-bold">
+                    0{activeProjectIdx + 1}
+                  </span>
+                  <span>/</span>
+                  <span>0{filteredProjects.length}</span>
+                </div>
+
+                {/* Left / Right Slider Nav Buttons */}
+                <div className="flex items-center gap-2">
                   <button
-                    key={cat}
-                    onClick={() => setSelectedCategory(cat)}
-                    className={`px-3 sm:px-4 py-1.5 rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider transition-all ${selectedCategory === cat
-                      ? "bg-[#ff1e2d] text-white shadow-[0_0_15px_rgba(255,30,45,0.6)]"
-                      : "text-zinc-400 hover:text-white"
-                      }`}
-                    style={{ fontFamily: "'Outfit', sans-serif" }}
+                    onClick={() => scrollProjectSlider("left")}
+                    disabled={!canScrollPrev}
+                    className={`w-10 h-10 rounded-full border flex items-center justify-center transition-all ${
+                      canScrollPrev
+                        ? "border-white/20 bg-black/70 text-white hover:bg-[#ff1e2d] hover:border-[#ff1e2d] shadow-[0_0_15px_rgba(255,30,45,0.3)] cursor-pointer active:scale-95"
+                        : "border-white/5 bg-black/40 text-zinc-600 cursor-not-allowed opacity-40"
+                    }`}
+                    aria-label="Previous project slide"
                   >
-                    {cat}
+                    <ChevronLeft className="w-5 h-5" />
                   </button>
+                  <button
+                    onClick={() => scrollProjectSlider("right")}
+                    disabled={!canScrollNext}
+                    className={`w-10 h-10 rounded-full border flex items-center justify-center transition-all ${
+                      canScrollNext
+                        ? "border-white/20 bg-black/70 text-white hover:bg-[#ff1e2d] hover:border-[#ff1e2d] shadow-[0_0_15px_rgba(255,30,45,0.3)] cursor-pointer active:scale-95"
+                        : "border-white/5 bg-black/40 text-zinc-600 cursor-not-allowed opacity-40"
+                    }`}
+                    aria-label="Next project slide"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Horizontal Slide Container (Single Line) */}
+            <div className="relative group/slider">
+              {/* Left Subtle Edge Fade */}
+              {canScrollPrev && (
+                <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-12 sm:w-20 bg-gradient-to-r from-[#0a0404] to-transparent z-10 transition-opacity" />
+              )}
+              {/* Right Subtle Edge Fade */}
+              {canScrollNext && (
+                <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-12 sm:w-20 bg-gradient-to-l from-[#0a0404] to-transparent z-10 transition-opacity" />
+              )}
+
+              <div
+                ref={projectSliderRef}
+                onScroll={checkProjectScroll}
+                className="flex gap-6 sm:gap-8 overflow-x-auto scrollbar-none snap-x snap-mandatory py-4 px-1 scroll-smooth"
+                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+              >
+                {filteredProjects.map((p, idx) => (
+                  <div
+                    key={p.id}
+                    className="project-slide-card w-[310px] sm:w-[370px] md:w-[410px] shrink-0 snap-start glass-card glass-card-glow rounded-2xl overflow-hidden flex flex-col group border border-white/10 hover:border-[#ff1e2d]/60 transition-all duration-300"
+                  >
+                    {/* Image / Visual Stage */}
+                    <div className="relative h-56 w-full overflow-hidden bg-black/80">
+                      <img
+                        src={p.image || "/portraits/section1.jpg"}
+                        alt={p.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter contrast-105"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0404] via-transparent to-black/40 pointer-events-none" />
+
+                      {/* Category Badge */}
+                      <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/70 border border-[#ff1e2d]/40 backdrop-blur-md text-[10px] font-mono text-[#ff4d5a]">
+                        {p.category}
+                      </div>
+
+                      {/* Interactive External Link CTA */}
+                      <div className="absolute top-3 right-3 flex items-center gap-1.5">
+                        <a
+                          href={p.githubUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="w-8 h-8 rounded-full bg-black/75 border border-white/15 flex items-center justify-center text-zinc-300 hover:text-white hover:bg-[#ff1e2d] transition-all"
+                          aria-label="View Source on GitHub"
+                        >
+                          <GithubIcon className="w-4 h-4" />
+                        </a>
+                        <a
+                          href={p.demoUrl}
+                          className="w-8 h-8 rounded-full bg-black/75 border border-white/15 flex items-center justify-center text-zinc-300 hover:text-white hover:bg-[#ff1e2d] transition-all"
+                          aria-label="Live Demo"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                        </a>
+                      </div>
+                    </div>
+
+                    {/* Content Stage */}
+                    <div className="p-6 flex-1 flex flex-col justify-between">
+                      <div>
+                        <h3
+                          className="text-xl font-black uppercase text-white tracking-tight mb-2 group-hover:text-[#ff1e2d] transition-colors"
+                          style={{ fontFamily: "'Outfit', sans-serif" }}
+                        >
+                          {p.title}
+                        </h3>
+                        <p className="text-xs text-zinc-400 leading-relaxed mb-4">
+                          {p.description}
+                        </p>
+
+                        {/* Bullet Highlights */}
+                        <ul className="space-y-1.5 mb-6">
+                          {p.highlights.map((h, i) => (
+                            <li key={i} className="flex items-start gap-2 text-[11px] text-zinc-300">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-[#ff1e2d] shrink-0 mt-0.5" />
+                              <span>{h}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Footer Tech Stack Tags */}
+                      <div className="pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex flex-wrap gap-1.5">
+                          {p.tags.map((t) => (
+                            <span
+                              key={t}
+                              className="px-2 py-0.5 rounded text-[10px] font-mono bg-white/5 border border-white/5 text-zinc-300"
+                            >
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+
+                        <a
+                          href={p.demoUrl}
+                          className="text-xs font-bold text-[#ff1e2d] hover:text-white inline-flex items-center gap-1 uppercase tracking-wider"
+                          style={{ fontFamily: "'Outfit', sans-serif" }}
+                        >
+                          <span>Details</span>
+                          <ChevronRight className="w-3.5 h-3.5" />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
 
-            {/* Masonry / Grid Project Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-              {filteredProjects.map((p, idx) => (
-                <div
-                  key={p.id}
-                  className="glass-card glass-card-glow rounded-2xl overflow-hidden flex flex-col group border border-white/10 hover:border-[#ff1e2d]/60 transition-all duration-300"
-                >
-                  {/* Image / Visual Stage */}
-                  <div className="relative h-56 w-full overflow-hidden bg-black/80">
-                    <img
-                      src={p.image || "/portraits/section1.jpg"}
-                      alt={p.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter contrast-105"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0404] via-transparent to-black/40 pointer-events-none" />
-
-                    {/* Category Badge */}
-                    <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/70 border border-[#ff1e2d]/40 backdrop-blur-md text-[10px] font-mono text-[#ff4d5a]">
-                      {p.category}
-                    </div>
-
-                    {/* Interactive External Link CTA */}
-                    <div className="absolute top-3 right-3 flex items-center gap-1.5">
-                      <a
-                        href={p.githubUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="w-8 h-8 rounded-full bg-black/75 border border-white/15 flex items-center justify-center text-zinc-300 hover:text-white hover:bg-[#ff1e2d] transition-all"
-                        aria-label="View Source on GitHub"
-                      >
-                        <GithubIcon className="w-4 h-4" />
-                      </a>
-                      <a
-                        href={p.demoUrl}
-                        className="w-8 h-8 rounded-full bg-black/75 border border-white/15 flex items-center justify-center text-zinc-300 hover:text-white hover:bg-[#ff1e2d] transition-all"
-                        aria-label="Live Demo"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* Content Stage */}
-                  <div className="p-6 flex-1 flex flex-col justify-between">
-                    <div>
-                      <h3
-                        className="text-xl font-black uppercase text-white tracking-tight mb-2 group-hover:text-[#ff1e2d] transition-colors"
-                        style={{ fontFamily: "'Outfit', sans-serif" }}
-                      >
-                        {p.title}
-                      </h3>
-                      <p className="text-xs text-zinc-400 leading-relaxed mb-4">
-                        {p.description}
-                      </p>
-
-                      {/* Bullet Highlights */}
-                      <ul className="space-y-1.5 mb-6">
-                        {p.highlights.map((h, i) => (
-                          <li key={i} className="flex items-start gap-2 text-[11px] text-zinc-300">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-[#ff1e2d] shrink-0 mt-0.5" />
-                            <span>{h}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Footer Tech Stack Tags */}
-                    <div className="pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex flex-wrap gap-1.5">
-                        {p.tags.map((t) => (
-                          <span
-                            key={t}
-                            className="px-2 py-0.5 rounded text-[10px] font-mono bg-white/5 border border-white/5 text-zinc-300"
-                          >
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-
-                      <a
-                        href={p.demoUrl}
-                        className="text-xs font-bold text-[#ff1e2d] hover:text-white inline-flex items-center gap-1 uppercase tracking-wider"
-                        style={{ fontFamily: "'Outfit', sans-serif" }}
-                      >
-                        <span>Details</span>
-                        <ChevronRight className="w-3.5 h-3.5" />
-                      </a>
-                    </div>
-                  </div>
-                </div>
+            {/* Interactive Slide Pagination Dots */}
+            <div className="flex items-center justify-center gap-2 mt-6">
+              {filteredProjects.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => scrollToProjectSlide(i)}
+                  className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                    activeProjectIdx === i
+                      ? "w-8 bg-[#ff1e2d] shadow-[0_0_12px_#ff1e2d]"
+                      : "w-2 bg-white/20 hover:bg-white/40"
+                  }`}
+                  aria-label={`Go to slide ${i + 1}`}
+                />
               ))}
             </div>
           </div>
@@ -833,9 +986,9 @@ export default function App() {
         {/* =========================================================================
             AWARDS & RECOGNITION SECTION
             ========================================================================= */}
-        <section id="awards" className="py-16 sm:py-20 lg:py-28 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16" data-reveal>
+        <section id="awards" className="py-16 sm:py-20 lg:py-28 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-28" data-reveal>
           <div id="leadership" className="scroll-mt-28" />
-          <div className="max-w-7xl mx-auto">
+          <div className="w-full mx-auto">
             <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
               <div className="section-kicker justify-center">
                 <i /> RECOGNITION & HONORS
@@ -899,8 +1052,8 @@ export default function App() {
         {/* =========================================================================
             SKILLS & TECH STACK SECTION (Exact Reference Photo Layout)
             ========================================================================= */}
-        <section id="skills" className="py-16 sm:py-20 lg:py-28 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16" data-reveal>
-          <div className="max-w-7xl mx-auto">
+        <section id="skills" className="py-16 sm:py-20 lg:py-28 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-28" data-reveal>
+          <div className="w-full mx-auto">
             <SkillsTechStack />
           </div>
         </section>
@@ -910,8 +1063,8 @@ export default function App() {
         {/* =========================================================================
             EXPERIENCE & EDUCATION TIMELINE
             ========================================================================= */}
-        <section id="experience" className="py-16 sm:py-20 lg:py-28 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16" data-reveal>
-          <div className="max-w-5xl mx-auto">
+        <section id="experience" className="py-16 sm:py-20 lg:py-28 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-28" data-reveal>
+          <div className="w-full max-w-[1800px] mx-auto">
             <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
               <div className="section-kicker justify-center">
                 <i /> CAREER & ACADEMIA
@@ -924,12 +1077,24 @@ export default function App() {
               </p>
             </div>
 
-            <div className="relative border-l-2 border-[#ff1e2d]/40 pl-5 sm:pl-8 md:pl-10 ml-2 sm:ml-4 md:ml-8 space-y-8 sm:space-y-12">
+            {/* Spider-Web Suspended Timeline Container */}
+            <div className="relative pl-7 sm:pl-10 md:pl-14 ml-3 sm:ml-6 md:ml-10 space-y-8 sm:space-y-12">
+              {/* Continuous Glowing Spider-Silk Main Filament */}
+              <div className="absolute left-0 top-2 bottom-6 w-[2px] pointer-events-none -translate-x-1/2 z-10">
+                {/* Ambient silk atmospheric glow */}
+                <div className="absolute inset-y-0 -left-1 w-[4px] bg-[#ff1e2d]/35 blur-[2px] animate-pulse" />
+                {/* Main silk thread */}
+                <div className="absolute inset-0 bg-gradient-to-b from-[#ff1e2d] via-white/80 to-[#ff1e2d]/70 shadow-[0_0_8px_#ff1e2d]" />
+                {/* Animated traveling silk crawl light */}
+                <div className="absolute w-full h-32 bg-gradient-to-b from-transparent via-white to-transparent animate-silk-crawl" />
+              </div>
+
               {/* Timeline Item 1: Jaz Infotech */}
               <div className="relative group">
-                <span className="absolute -left-[27px] sm:-left-[39px] md:-left-[47px] top-1.5 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#ff1e2d] border-4 border-[#0a0404] shadow-[0_0_15px_#ff1e2d]" />
-                <div className="glass-card p-5 sm:p-6 rounded-2xl">
-                  <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                <SpiderWebAnchor isCurrent={true} />
+                <div className="glass-card p-5 sm:p-6 rounded-2xl relative overflow-hidden group-hover:border-[#ff1e2d]/60 transition-all duration-300">
+                  <SpiderWebCardWatermark />
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-2 relative z-10">
                     <span className="text-xs font-mono text-[#ff1e2d] font-bold tracking-wider">
                       JUN 2026 — PRESENT
                     </span>
@@ -938,15 +1103,15 @@ export default function App() {
                     </span>
                   </div>
                   <h3
-                    className="text-2xl font-black uppercase text-white mb-1"
+                    className="text-2xl font-black uppercase text-white mb-1 relative z-10"
                     style={{ fontFamily: "'Outfit', sans-serif" }}
                   >
                     Full-Stack Web Development Intern
                   </h3>
-                  <p className="text-xs font-mono text-zinc-400 mb-4">
+                  <p className="text-xs font-mono text-zinc-400 mb-4 relative z-10">
                     JAZ INFOTECH · TIRUNELVELI, TAMIL NADU
                   </p>
-                  <p className="text-sm text-zinc-300 leading-relaxed mb-4">
+                  <p className="text-sm text-zinc-300 leading-relaxed mb-4 relative z-10">
                     • Developed and launched live client website: <strong>Tevolt</strong> (tevolt.in) for an EV charging infrastructure company.<br />
                     • Built responsive frontend interfaces and implemented interactive website functionality with React.js &amp; modern CSS.<br />
                     • Worked on backend functionality, REST API integration, and database-related tasks with Node.js &amp; MySQL.<br />
@@ -954,7 +1119,7 @@ export default function App() {
                     • Performed testing, debugging, and optimization for reliability, performance, and UX.<br />
                     • Utilized Git and GitHub for version control and collaborative workflows.
                   </p>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 relative z-10">
                     {["React.js", "Node.js", "Express.js", "MySQL", "Tevolt (tevolt.in)", "REST APIs", "Git & GitHub", "Postman"].map((tag) => (
                       <span
                         key={tag}
@@ -969,9 +1134,10 @@ export default function App() {
 
               {/* Timeline Item 2: Premises Management System */}
               <div className="relative group">
-                <span className="absolute -left-[31px] sm:-left-[47px] top-1.5 w-5 h-5 rounded-full bg-white/80 border-4 border-[#0a0404] shadow-md" />
-                <div className="glass-card p-6 rounded-2xl">
-                  <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                <SpiderWebAnchor isCurrent={false} />
+                <div className="glass-card p-6 rounded-2xl relative overflow-hidden group-hover:border-[#ff1e2d]/60 transition-all duration-300">
+                  <SpiderWebCardWatermark />
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-2 relative z-10">
                     <span className="text-xs font-mono text-zinc-400 tracking-wider">
                       2026
                     </span>
@@ -980,21 +1146,21 @@ export default function App() {
                     </span>
                   </div>
                   <h3
-                    className="text-2xl font-black uppercase text-white mb-1"
+                    className="text-2xl font-black uppercase text-white mb-1 relative z-10"
                     style={{ fontFamily: "'Outfit', sans-serif" }}
                   >
                     Premises Management System (Full-Stack)
                   </h3>
-                  <p className="text-xs font-mono text-zinc-400 mb-4">
+                  <p className="text-xs font-mono text-zinc-400 mb-4 relative z-10">
                     FULL-STACK WEB APPLICATION · PROPERTY &amp; TENANT LEDGER
                   </p>
-                  <p className="text-sm text-zinc-300 leading-relaxed mb-4">
+                  <p className="text-sm text-zinc-300 leading-relaxed mb-4 relative z-10">
                     • Built a comprehensive property management system for tracking properties, tenants, and lease agreements.<br />
                     • Designed RESTful APIs for CRUD operations and rent payment tracking (online &amp; cash methods).<br />
                     • Created responsive React.js UI with real-time state management and seamless user workflows.<br />
                     • Implemented MongoDB Atlas cloud database for secure data persistence.
                   </p>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 relative z-10">
                     {["React.js", "Node.js", "Express.js", "MongoDB Atlas", "RESTful APIs", "Rent Tracking", "JSON"].map((tag) => (
                       <span
                         key={tag}
@@ -1009,9 +1175,10 @@ export default function App() {
 
               {/* Timeline Item 3: Education B.Sc Computer Science */}
               <div className="relative group">
-                <span className="absolute -left-[31px] sm:-left-[47px] top-1.5 w-5 h-5 rounded-full bg-[#ff1e2d] border-4 border-[#0a0404] shadow-[0_0_10px_#ff1e2d]" />
-                <div className="glass-card p-6 rounded-2xl">
-                  <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                <SpiderWebAnchor isCurrent={false} />
+                <div className="glass-card p-6 rounded-2xl relative overflow-hidden group-hover:border-[#ff1e2d]/60 transition-all duration-300">
+                  <SpiderWebCardWatermark />
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-2 relative z-10">
                     <span className="text-xs font-mono text-[#ff4d5a] font-bold tracking-wider">
                       2023 — 2026 (GRADUATION: 2026)
                     </span>
@@ -1020,18 +1187,18 @@ export default function App() {
                     </span>
                   </div>
                   <h3
-                    className="text-2xl font-black uppercase text-white mb-1"
+                    className="text-2xl font-black uppercase text-white mb-1 relative z-10"
                     style={{ fontFamily: "'Outfit', sans-serif" }}
                   >
                     Bachelor of Science (B.Sc.) in Computer Science
                   </h3>
-                  <p className="text-xs font-mono text-zinc-400 mb-2">
+                  <p className="text-xs font-mono text-zinc-400 mb-2 relative z-10">
                     SADAKATHULLAH APPA COLLEGE · TIRUNELVELI, TAMIL NADU
                   </p>
-                  <p className="text-sm text-zinc-300 leading-relaxed mb-4">
+                  <p className="text-sm text-zinc-300 leading-relaxed mb-4 relative z-10">
                     Rigorous undergraduate computer science curriculum emphasizing software design fundamentals, relational database management systems (MySQL), data structures, modern web technologies, and computational logic.
                   </p>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 relative z-10">
                     {["Computer Science", "Database Systems (MySQL)", "Software Engineering", "Data Structures", "Algorithms"].map((tag) => (
                       <span
                         key={tag}
@@ -1046,9 +1213,10 @@ export default function App() {
 
               {/* Timeline Item 4: Continuous Learning & Technical Foundation */}
               <div className="relative group">
-                <span className="absolute -left-[31px] sm:-left-[47px] top-1.5 w-5 h-5 rounded-full bg-white/60 border-4 border-[#0a0404]" />
-                <div className="glass-card p-6 rounded-2xl">
-                  <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                <SpiderWebAnchor isCurrent={false} />
+                <div className="glass-card p-6 rounded-2xl relative overflow-hidden group-hover:border-[#ff1e2d]/60 transition-all duration-300">
+                  <SpiderWebCardWatermark />
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-2 relative z-10">
                     <span className="text-xs font-mono text-zinc-400 tracking-wider">
                       2024 — PRESENT
                     </span>
@@ -1057,18 +1225,18 @@ export default function App() {
                     </span>
                   </div>
                   <h3
-                    className="text-2xl font-black uppercase text-white mb-1"
+                    className="text-2xl font-black uppercase text-white mb-1 relative z-10"
                     style={{ fontFamily: "'Outfit', sans-serif" }}
                   >
                     Software Engineering &amp; Solutions Development
                   </h3>
-                  <p className="text-xs font-mono text-zinc-400 mb-2">
+                  <p className="text-xs font-mono text-zinc-400 mb-2 relative z-10">
                     CONTINUOUS LEARNING &amp; OPEN SOURCE
                   </p>
-                  <p className="text-sm text-zinc-300 leading-relaxed mb-4">
+                  <p className="text-sm text-zinc-300 leading-relaxed mb-4 relative z-10">
                     Committed to delivering quality software solutions through clean code, modern JavaScript (ES6+), responsive frontend architectures with Tailwind CSS &amp; Bootstrap, and Postman API testing.
                   </p>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 relative z-10">
                     {["JavaScript (ES6+)", "Tailwind CSS", "Bootstrap", "Postman", "Responsive Design", "Quality Solutions"].map((tag) => (
                       <span
                         key={tag}
@@ -1087,119 +1255,10 @@ export default function App() {
         <div className="section-seam" />
 
         {/* =========================================================================
-            INTERACTIVE GALLERY SECTION
-            ========================================================================= */}
-        <section id="gallery" className="py-16 sm:py-20 lg:py-28 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16" data-reveal>
-          <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16 gap-6">
-              <div>
-                <div className="section-kicker">
-                  <i /> VISUAL DOSSIER
-                </div>
-                <h2 className="section-title">
-                  Interactive <span className="gradient-crimson-text">Gallery.</span>
-                </h2>
-              </div>
-              <p className="text-xs sm:text-sm text-zinc-400 max-w-md">
-                Click any portrait frame below to inspect full-screen high-resolution details, lighting direction, and cybernetic art treatments.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              {GALLERY_ITEMS.map((item, idx) => (
-                <div
-                  key={item.title}
-                  onClick={() => setGalleryModal(item)}
-                  className="glass-card rounded-2xl overflow-hidden cursor-pointer group border border-white/10 hover:border-[#ff1e2d] transition-all duration-300"
-                >
-                  <div className="relative aspect-[4/5] overflow-hidden bg-black">
-                    <img
-                      src={item.src}
-                      alt={item.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter contrast-105"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
-
-                    {/* Badge */}
-                    <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/70 border border-[#ff1e2d]/40 backdrop-blur-md text-[10px] font-mono text-zinc-300">
-                      0{idx + 1} // DOSSIER
-                    </div>
-
-                    {/* View Button */}
-                    <div className="absolute bottom-4 right-4 w-9 h-9 rounded-full bg-[#ff1e2d] text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-[0_0_15px_#ff1e2d]">
-                      <Eye className="w-4 h-4" />
-                    </div>
-
-                    <div className="absolute bottom-4 left-4 right-14">
-                      <h4
-                        className="text-base font-black uppercase text-white tracking-tight leading-tight truncate"
-                        style={{ fontFamily: "'Outfit', sans-serif" }}
-                      >
-                        {item.title}
-                      </h4>
-                      <span className="text-[10px] font-mono text-[#ff4d5a]">
-                        {item.subtitle}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Gallery Modal Fullscreen Inspector */}
-        {galleryModal && (
-          <div
-            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex items-center justify-center p-4 animate-in fade-in duration-300"
-            onClick={() => setGalleryModal(null)}
-          >
-            <div
-              className="relative max-w-3xl w-full rounded-2xl overflow-hidden bg-[#120608] border border-[#ff1e2d]/40 shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                onClick={() => setGalleryModal(null)}
-                className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/60 text-white hover:bg-[#ff1e2d] transition-colors"
-                aria-label="Close Preview"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              <div className="relative aspect-square sm:aspect-[4/3] w-full bg-black">
-                <img
-                  src={galleryModal.src}
-                  alt={galleryModal.title}
-                  className="w-full h-full object-contain"
-                />
-              </div>
-
-              <div className="p-6 bg-[#0e0406] border-t border-white/10">
-                <span className="text-xs font-mono text-[#ff1e2d] uppercase tracking-wider block mb-1">
-                  {galleryModal.subtitle}
-                </span>
-                <h3
-                  className="text-2xl font-black uppercase text-white mb-2"
-                  style={{ fontFamily: "'Outfit', sans-serif" }}
-                >
-                  {galleryModal.title}
-                </h3>
-                <p className="text-sm text-zinc-300 leading-relaxed font-normal">
-                  {galleryModal.desc}
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        <div className="section-seam" />
-
-        {/* =========================================================================
             TESTIMONIALS SECTION
             ========================================================================= */}
-        <section className="py-16 sm:py-20 lg:py-28 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16" data-reveal>
-          <div className="max-w-4xl mx-auto">
+        <section className="py-16 sm:py-20 lg:py-28 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-28 relative overflow-hidden" data-reveal>
+          <div className="w-full max-w-[1600px] mx-auto">
             <div className="glass-card p-6 sm:p-10 md:p-14 rounded-3xl relative overflow-hidden border border-[#ff1e2d]/30 text-center">
               {/* Quote Mark Background Icon */}
               <div className="absolute top-6 left-8 text-7xl font-serif text-[#ff1e2d]/10 select-none pointer-events-none">
@@ -1244,8 +1303,8 @@ export default function App() {
         {/* =========================================================================
             CONTACT SECTION
             ========================================================================= */}
-        <section id="contact" className="py-16 sm:py-20 lg:py-28 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16" data-reveal>
-          <div className="max-w-6xl mx-auto">
+        <section id="contact" className="py-16 sm:py-20 lg:py-28 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-28 relative" data-reveal>
+          <div className="w-full mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
               {/* Left Contact Details */}
               <div className="lg:col-span-5 flex flex-col justify-between">
@@ -1408,8 +1467,8 @@ export default function App() {
         {/* =========================================================================
             FOOTER
             ========================================================================= */}
-        <footer className="border-t border-white/10 bg-[#080203]/90 backdrop-blur-md pt-12 pb-28 sm:pb-24 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
-          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+        <footer className="border-t border-white/10 bg-[#080203]/90 backdrop-blur-md pt-12 pb-28 sm:pb-24 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-28">
+          <div className="w-full mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-[#ff1e2d] flex items-center justify-center text-white font-black text-xs shadow-[0_0_12px_#ff1e2d]">
                 MA
@@ -1434,7 +1493,6 @@ export default function App() {
               <a href="#awards" className="hover:text-white transition-colors">Awards</a>
               <a href="#skills" className="hover:text-white transition-colors">Skills</a>
               <a href="#experience" className="hover:text-white transition-colors">Experience</a>
-              <a href="#gallery" className="hover:text-white transition-colors">Gallery</a>
               <a href="#contact" className="hover:text-white transition-colors">Contact</a>
             </div>
 

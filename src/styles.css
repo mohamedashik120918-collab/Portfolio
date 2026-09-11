@@ -125,7 +125,7 @@ button {
 
 .hero-bio {
   color: rgba(255, 255, 255, 0.72);
-  max-width: 530px;
+  max-width: 680px;
   margin-bottom: 24px;
   font-size: clamp(13px, 1.5vw, 15px);
   line-height: 1.6;
@@ -188,12 +188,10 @@ button {
   left: -100%;
   width: 60%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.28) 50%,
-    transparent 100%
-  );
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.28) 50%,
+      transparent 100%);
   transform: skewX(-25deg);
   transition: none;
   pointer-events: none;
@@ -247,6 +245,7 @@ button {
     opacity: 1;
     transform: scale(0.6);
   }
+
   to {
     opacity: 0;
     transform: scale(2.4);
@@ -272,7 +271,7 @@ button {
   background-color: rgba(14, 5, 7, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 28px;
-  box-shadow: 
+  box-shadow:
     0 15px 40px rgba(0, 0, 0, 0.9),
     0 0 24px rgba(232, 0, 26, 0.25);
   backdrop-filter: blur(20px);
@@ -303,6 +302,7 @@ button {
     gap: 6px;
     border-radius: 22px;
   }
+
   .dock-item {
     width: 35px;
     height: 35px;
@@ -406,8 +406,43 @@ button {
    PREMIUM SPIDER-MAN MASK & ORBITAL CURSOR
    ========================================================================= */
 @media (pointer: fine) {
-  body, a, button, input, [role="button"], textarea, select {
+
+  body,
+  a,
+  button,
+  input,
+  [role="button"],
+  textarea,
+  select {
     cursor: none !important;
+  }
+
+  /* Form Section: Restore standard browser cursors */
+  #contact form,
+  #contact form *,
+  [data-no-cursor],
+  [data-no-cursor] *,
+  .no-custom-cursor,
+  .no-custom-cursor * {
+    cursor: default !important;
+  }
+
+  #contact form input,
+  #contact form textarea,
+  [data-no-cursor] input,
+  [data-no-cursor] textarea,
+  .no-custom-cursor input,
+  .no-custom-cursor textarea {
+    cursor: text !important;
+  }
+
+  #contact form button,
+  #contact form [type="submit"],
+  [data-no-cursor] button,
+  [data-no-cursor] [type="submit"],
+  .no-custom-cursor button,
+  .no-custom-cursor [type="submit"] {
+    cursor: pointer !important;
   }
 }
 
@@ -503,6 +538,7 @@ button {
     filter: drop-shadow(0 0 2px #ff3845);
     transform: translateX(-50%) scale(0.95);
   }
+
   100% {
     filter: drop-shadow(0 0 6px #ff1e2d) drop-shadow(0 0 10px #ff808b);
     transform: translateX(-50%) scale(1.08);
@@ -514,40 +550,31 @@ button {
   position: fixed;
   top: 0;
   left: 0;
-  width: 32px;
-  height: 32px;
-  margin-top: -16px;
-  margin-left: -16px;
+  width: 34px;
+  height: 34px;
+  margin-top: -17px;
+  margin-left: -17px;
   border-radius: 50%;
-  border: 1.2px solid rgba(255, 30, 45, 0.65);
+  border: 1.2px solid rgba(255, 30, 45, 0.7);
   box-shadow: 0 0 10px rgba(255, 30, 45, 0.4), inset 0 0 5px rgba(255, 30, 45, 0.15);
   pointer-events: none;
   will-change: transform;
   z-index: 1;
-  transition: width 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-              height 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-              margin 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.25s ease,
-              box-shadow 0.25s ease,
-              background 0.25s ease;
+  transition: border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
 
 .cursor-portal.hovered .cursor-orbital-ring {
-  width: 44px;
-  height: 44px;
-  margin-top: -22px;
-  margin-left: -22px;
   border-color: rgba(255, 30, 45, 0.95);
   background: rgba(255, 30, 45, 0.08);
-  box-shadow: 0 0 16px rgba(255, 30, 45, 0.75), inset 0 0 8px rgba(255, 30, 45, 0.25);
-  backdrop-filter: blur(1.5px);
+  box-shadow: 0 0 16px rgba(255, 30, 45, 0.8), inset 0 0 8px rgba(255, 30, 45, 0.3);
 }
 
 .cursor-portal.clicking .cursor-orbital-ring {
-  transform: scale(0.85);
   border-color: #ffffff;
-  background: rgba(255, 30, 45, 0.3);
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 10px #ff1e2d;
+  background: rgba(255, 30, 45, 0.25);
+  box-shadow: 0 0 18px rgba(255, 255, 255, 0.85), 0 0 10px #ff1e2d;
 }
 
 /* Reticle crosshair accents on orbital ring */
@@ -721,7 +748,7 @@ button {
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
 
@@ -742,8 +769,8 @@ button {
   background: #070203;
   color: #ffffff;
   transition: opacity 0.8s cubic-bezier(0.76, 0, 0.24, 1),
-              transform 0.8s cubic-bezier(0.76, 0, 0.24, 1),
-              visibility 0.8s;
+    transform 0.8s cubic-bezier(0.76, 0, 0.24, 1),
+    visibility 0.8s;
 }
 
 .intro-screen-crimson.exit {
@@ -755,18 +782,24 @@ button {
 
 /* Animations */
 @keyframes pulseCrimson {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 0 15px rgba(255, 30, 45, 0.4);
   }
+
   50% {
     box-shadow: 0 0 35px rgba(255, 30, 45, 0.85);
   }
 }
 
 @keyframes floatGentle {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-8px);
   }
@@ -780,9 +813,55 @@ button {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Spider-Web Timeline Animations */
+@keyframes spiderSway {
+
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(7deg);
+  }
+
+  75% {
+    transform: rotate(-7deg);
+  }
+}
+
+.animate-spider-sway {
+  animation: spiderSway 4s ease-in-out infinite;
+}
+
+@keyframes silkCrawl {
+  0% {
+    top: -100px;
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.8;
+  }
+
+  80% {
+    opacity: 0.8;
+  }
+
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+.animate-silk-crawl {
+  animation: silkCrawl 4s ease-in-out infinite;
 }
 
 /* Responsive adjustments */

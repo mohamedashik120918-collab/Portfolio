@@ -150,7 +150,14 @@ export function CustomCursor() {
   const [isHovered, setIsHovered] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
   const [isTouch, setIsTouch] = useState(false);
+
+  // Persistent refs so animation loop and event handlers NEVER restart or jump
+  const isHoveredRef = useRef(false);
+  const isClickingRef = useRef(false);
+  const isVisibleRef = useRef(false);
+  const isDisabledRef = useRef(false);
 
   useEffect(() => {
     // Disable on touch devices
@@ -164,38 +171,37 @@ export function CustomCursor() {
     let prevMouseX = mouseX;
     let ringX = mouseX;
     let ringY = mouseY;
+    let currentScale = 1.0;
     let currentTilt = 0;
     let targetTilt = 0;
     let animId = 0;
 
-    // Spider-Web Trail & Click Burst System
-    interface WebNode {
+    // Authentic Spiderman Spider-Web Click Splat System
+    interface RealSpiderWeb {
+      x: number;
+      y: number;
+      maxRadius: number;
+      createdAt: number;
+      duration: number;
+      spokes: number;
+      rings: number;
+      angles: number[];
+      spokeLengths: number[];
+    }
+
+    interface MotionTrailPoint {
       x: number;
       y: number;
       vx: number;
       vy: number;
       life: number;
-      isCompanion: boolean;
-      isClickBurst?: boolean;
-      spokeIndex?: number;
-      ringLevel?: number;
-      originX?: number;
-      originY?: number;
       decay: number;
     }
 
-    interface Shockwave {
-      x: number;
-      y: number;
-      radius: number;
-      maxRadius: number;
-      alpha: number;
-    }
-
-    const webNodes: WebNode[] = [];
-    const shockwaves: Shockwave[] = [];
-    let lastSpawnX = mouseX;
-    let lastSpawnY = mouseY;
+    const activeWebs: RealSpiderWeb[] = [];
+    const motionTrail: MotionTrailPoint[] = [];
+    let lastTrailX = mouseX;
+    let lastTrailY = mouseY;
 
     const canvas = canvasRef.current;
     let ctx = canvas ? canvas.getContext("2d") : null;
@@ -207,7 +213,7 @@ export function CustomCursor() {
       canvas.height = window.innerHeight * dpr;
       ctx = canvas.getContext("2d");
       if (ctx) {
-        ctx.scale(dpr, dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       }
     };
 
@@ -217,374 +223,378 @@ export function CustomCursor() {
     const onMouseMove = (e: MouseEvent) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
-      if (!isVisible) setIsVisible(true);
+
+      // Check if mouse is hovering over the contact form where custom cursor is disabled
+      const target = e.target as HTMLElement | null;
+      const isFormZone = Boolean(
+        target?.closest("#contact form, [data-no-cursor], .no-custom-cursor")
+      );
+      if (isFormZone !== isDisabledRef.current) {
+        isDisabledRef.current = isFormZone;
+        setIsDisabled(isFormZone);
+      }
+
+      if (!isVisibleRef.current) {
+        isVisibleRef.current = true;
+        setIsVisible(true);
+        // Instant snap ring to mouse on initial appearance
+        ringX = mouseX;
+        ringY = mouseY;
+      }
 
       const deltaX = mouseX - prevMouseX;
       prevMouseX = mouseX;
 
-      // Subtle dynamic tilt in direction of movement
-      targetTilt = Math.max(-18, Math.min(18, deltaX * 0.9));
+      // Dynamic tilt in direction of movement
+      targetTilt = Math.max(-16, Math.min(16, deltaX * 0.8));
 
-      // Spawn Spider-Web trail points when moving
-      const moveDist = Math.hypot(mouseX - lastSpawnX, mouseY - lastSpawnY);
-      if (moveDist > 9) {
-        const angle = Math.atan2(mouseY - lastSpawnY, mouseX - lastSpawnX);
-        const perpAngle = angle + Math.PI / 2;
+      // Subtle motion trail (only if not over form)
+      if (!isFormZone) {
+        const moveDist = Math.hypot(mouseX - lastTrailX, mouseY - lastTrailY);
+        if (moveDist > 14) {
+          motionTrail.unshift({
+            x: mouseX,
+            y: mouseY,
+            vx: (Math.random() - 0.5) * 0.4,
+            vy: (Math.random() - 0.5) * 0.4,
+            life: 1.0,
+            decay: 0.038,
+          });
 
-        // Primary trajectory node
-        webNodes.unshift({
-          x: mouseX,
-          y: mouseY,
-          vx: 0,
-          vy: 0,
-          life: 1.0,
-          isCompanion: false,
-          decay: 0.024,
-        });
+          lastTrailX = mouseX;
+          lastTrailY = mouseY;
 
-        // Lateral companion node to create triangular web mesh lattice
-        const offset = Math.random() * 18 - 9;
-        webNodes.unshift({
-          x: mouseX + Math.cos(perpAngle) * offset,
-          y: mouseY + Math.sin(perpAngle) * offset,
-          vx: 0,
-          vy: 0,
-          life: 0.9,
-          isCompanion: true,
-          decay: 0.024,
-        });
-
-        lastSpawnX = mouseX;
-        lastSpawnY = mouseY;
-
-        // Keep trail size bounded
-        if (webNodes.length > 70) {
-          webNodes.length = 70;
+          if (motionTrail.length > 20) {
+            motionTrail.length = 20;
+          }
         }
       }
     };
 
     const onMouseDown = (e: MouseEvent) => {
+      // Do not trigger click animation or webs when clicking inside form
+      if (isDisabledRef.current) return;
+
+      isClickingRef.current = true;
       setIsClicking(true);
+
       const clickX = e.clientX;
       const clickY = e.clientY;
 
-      // 1. Immediately remove any existing click burst web nodes & shockwaves
-      // so if clicked a second time, the previous click web disappears before the second click web effect appears!
-      for (let i = webNodes.length - 1; i >= 0; i--) {
-        if (webNodes[i].isClickBurst) {
-          webNodes.splice(i, 1);
-        }
-      }
-      shockwaves.length = 0;
+      // Original iconic 10-spoke Spider-Man web design, scaled down to a compact size
+      const SPOKES = 10;
+      const angles: number[] = [];
+      const spokeLengths: number[] = [];
+      const baseAngle = Math.random() * Math.PI * 2;
 
-      // 2. Concentric expanding Spider-Web Burst (spreads wide outwards!)
-      const SPOKES = 12;
-      for (let s = 0; s < SPOKES; s++) {
-        const angle = (Math.PI * 2 * s) / SPOKES;
-
-        // Inner web ring nodes (speed ~4.8px/frame -> expands ~45-55px)
-        const innerSpeed = 4.8 + Math.random() * 1.2;
-        webNodes.unshift({
-          x: clickX,
-          y: clickY,
-          vx: Math.cos(angle) * innerSpeed,
-          vy: Math.sin(angle) * innerSpeed,
-          life: 1.0,
-          isCompanion: false,
-          isClickBurst: true,
-          spokeIndex: s,
-          ringLevel: 0,
-          originX: clickX,
-          originY: clickY,
-          decay: 0.017,
-        });
-
-        // Outer web ring nodes (speed ~10px/frame -> expands ~100-120px)
-        const outerSpeed = 10.2 + Math.random() * 2.0;
-        webNodes.unshift({
-          x: clickX,
-          y: clickY,
-          vx: Math.cos(angle) * outerSpeed,
-          vy: Math.sin(angle) * outerSpeed,
-          life: 1.0,
-          isCompanion: true,
-          isClickBurst: true,
-          spokeIndex: s,
-          ringLevel: 1,
-          originX: clickX,
-          originY: clickY,
-          decay: 0.016,
-        });
+      for (let i = 0; i < SPOKES; i++) {
+        angles.push(baseAngle + (i * Math.PI * 2) / SPOKES + (Math.random() - 0.5) * 0.08);
+        spokeLengths.push(0.9 + Math.random() * 0.2);
       }
 
-      // Add dynamic expanding web shockwave
-      shockwaves.push({
+      activeWebs.push({
         x: clickX,
         y: clickY,
-        radius: 8,
-        maxRadius: 130,
-        alpha: 0.85,
+        maxRadius: 65 + Math.random() * 12, // Compact smaller size (~65px-77px)
+        createdAt: performance.now(),
+        duration: 1300, // Lingers gracefully for ~1.3s with gradual gentle fade-out
+        spokes: SPOKES,
+        rings: 4, // 4 concentric sagging web rings
+        angles,
+        spokeLengths,
       });
+
+      // Keep only up to 4 concurrent webs
+      if (activeWebs.length > 4) {
+        activeWebs.shift();
+      }
     };
 
-    const onMouseUp = () => setIsClicking(false);
+    const onMouseUp = () => {
+      isClickingRef.current = false;
+      setIsClicking(false);
+    };
 
-    const onMouseLeaveWindow = () => setIsVisible(false);
-    const onMouseEnterWindow = () => setIsVisible(true);
+    const onMouseLeaveWindow = () => {
+      isVisibleRef.current = false;
+      setIsVisible(false);
+    };
 
-    const handleHoverTargets = () => {
-      const interactiveEls = document.querySelectorAll(
-        "a, button, [role='button'], input, .tilt, .skill-list > div, .menu-btn, .project-tab, .glass-card, [data-interactive]"
+    const onMouseEnterWindow = (e: MouseEvent) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      ringX = mouseX;
+      ringY = mouseY;
+      isVisibleRef.current = true;
+      setIsVisible(true);
+    };
+
+    // Reliable event delegation for interactive hover targets
+    // NOTE: Excluded broad '.glass-card' container to prevent hover flickering & lag when traversing card grids
+    const onMouseOver = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+
+      // Check disabled form zone
+      const isFormZone = Boolean(
+        target.closest("#contact form, [data-no-cursor], .no-custom-cursor")
       );
+      if (isFormZone !== isDisabledRef.current) {
+        isDisabledRef.current = isFormZone;
+        setIsDisabled(isFormZone);
+      }
 
-      const enterHandler = () => setIsHovered(true);
-      const leaveHandler = () => setIsHovered(false);
-
-      interactiveEls.forEach((el) => {
-        el.addEventListener("mouseenter", enterHandler);
-        el.addEventListener("mouseleave", leaveHandler);
-      });
-
-      return () => {
-        interactiveEls.forEach((el) => {
-          el.removeEventListener("mouseenter", enterHandler);
-          el.removeEventListener("mouseleave", leaveHandler);
-        });
-      };
+      const interactive = Boolean(
+        target.closest(
+          "a, button, [role='button'], input, textarea, select, .menu-btn, .project-tab, [data-interactive], .shimmer-btn, .cursor-pointer"
+        )
+      );
+      if (interactive !== isHoveredRef.current) {
+        isHoveredRef.current = interactive;
+        setIsHovered(interactive);
+      }
     };
 
+    document.addEventListener("mouseover", onMouseOver, { passive: true });
     window.addEventListener("mousemove", onMouseMove, { passive: true });
     window.addEventListener("mousedown", onMouseDown);
     window.addEventListener("mouseup", onMouseUp);
     document.addEventListener("mouseleave", onMouseLeaveWindow);
     document.addEventListener("mouseenter", onMouseEnterWindow);
 
-    const cleanupHover = handleHoverTargets();
-
-    // 60fps Loop for Spiderman Mask, Orbital Ring & Spider-Web Trail Canvas
+    // 60fps Lock Animation Loop for Spiderman Mask, Orbital Ring & Real Spider-Web Canvas
     const loop = () => {
       animId = requestAnimationFrame(loop);
 
-      // Spring tilt damping
+      // 1. Tilt damping
       currentTilt += (targetTilt - currentTilt) * 0.15;
-      targetTilt *= 0.9;
+      targetTilt *= 0.88;
 
-      // Update Spiderman Mask
+      // 2. Spiderman Mask: Instant zero-latency lock with tilt
       if (dotRef.current) {
         dotRef.current.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) rotate(${currentTilt.toFixed(2)}deg)`;
       }
 
-      // Update Orbital Ring with smooth lag
-      ringX += (mouseX - ringX) * 0.16;
-      ringY += (mouseY - ringY) * 0.16;
+      // 3. Orbital Ring: Adaptive tight tracking (fixes the lagging behind / bug in cards section)
+      const dx = mouseX - ringX;
+      const dy = mouseY - ringY;
+      const dist = Math.hypot(dx, dy);
 
-      if (ringRef.current) {
-        ringRef.current.style.transform = `translate3d(${ringX}px, ${ringY}px, 0)`;
+      // If cursor jumps a huge distance (e.g. window re-entry), snap immediately
+      if (dist > 300) {
+        ringX = mouseX;
+        ringY = mouseY;
+      } else {
+        // Adaptive lerp: smooth when micro-moving, snappy when traversing cards so it never falls far behind
+        const lerpFactor = Math.min(0.62, 0.38 + dist * 0.0014);
+        ringX += dx * lerpFactor;
+        ringY += dy * lerpFactor;
       }
 
-      // Render Spider-Web System on Canvas
+      // Smooth scale interpolation in JS
+      const targetScale = isClickingRef.current ? 0.78 : isHoveredRef.current ? 1.35 : 1.0;
+      currentScale += (targetScale - currentScale) * 0.2;
+
+      if (ringRef.current) {
+        ringRef.current.style.transform = `translate3d(${ringX.toFixed(1)}px, ${ringY.toFixed(1)}px, 0) scale(${currentScale.toFixed(3)})`;
+      }
+
+      // 4. Render Spider-Web & Motion Silk Canvas
       if (ctx && canvas) {
-        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        // Clear canvas with full DPR support
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.restore();
 
-        // A. Draw & Update Shockwaves (Soft, ethereal silk pulse)
-        for (let i = shockwaves.length - 1; i >= 0; i--) {
-          const sw = shockwaves[i];
-          sw.radius += (sw.maxRadius - sw.radius) * 0.12;
-          sw.alpha *= 0.91;
+        const now = performance.now();
 
-          if (sw.alpha > 0.02) {
-            ctx.beginPath();
-            ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
-            ctx.strokeStyle = `rgba(255, 30, 45, ${sw.alpha * 0.35})`;
-            ctx.lineWidth = 1.0;
-            ctx.stroke();
-
-            // Subtle inner white ring
-            ctx.beginPath();
-            ctx.arc(sw.x, sw.y, sw.radius * 0.88, 0, Math.PI * 2);
-            ctx.strokeStyle = `rgba(255, 255, 255, ${sw.alpha * 0.2})`;
-            ctx.lineWidth = 0.6;
-            ctx.stroke();
-          } else {
-            shockwaves.splice(i, 1);
+        // A. Draw Authentic Spider-Web Click Splats (Original Design, Compact Size & Smooth Fade)
+        for (let w = activeWebs.length - 1; w >= 0; w--) {
+          const web = activeWebs[w];
+          const elapsed = now - web.createdAt;
+          if (elapsed >= web.duration) {
+            activeWebs.splice(w, 1);
+            continue;
           }
-        }
 
-        // B. Update Velocities for Click Burst Web Nodes (Silky smooth deceleration)
-        for (let i = 0; i < webNodes.length; i++) {
-          const n = webNodes[i];
-          if (n.vx !== 0 || n.vy !== 0) {
-            n.x += n.vx;
-            n.y += n.vy;
-            n.vx *= 0.89; // Silky deceleration
-            n.vy *= 0.89;
-          }
-        }
+          // Smooth initial shoot-out expansion in first 140ms with smooth cubic ease-out
+          const shootProgress = Math.min(1, elapsed / 140);
+          const shootEase = 1 - Math.pow(1 - shootProgress, 3);
+          const currentR = web.maxRadius * shootEase;
 
-        // C. Draw Spider-Web Connecting Strands
-        if (webNodes.length > 0) {
+          // Gradual, soft "lite lite ah" fade out starting gently after shoot-out
+          const fadeStart = 140;
+          const fadeProgress = Math.max(0, (elapsed - fadeStart) / (web.duration - fadeStart));
+          const alpha = Math.pow(1 - fadeProgress, 1.4);
+
+          if (alpha <= 0.005) continue;
+
+          ctx.save();
           ctx.lineCap = "round";
           ctx.lineJoin = "round";
-          const maxTrailDist = isHovered ? 78 : 65;
 
-          // 1. Lead threads from current cursor to nearest trail nodes (only non-burst)
-          for (let i = 0; i < Math.min(webNodes.length, 4); i++) {
-            const n1 = webNodes[i];
-            if (!n1.isClickBurst) {
-              const leadDist = Math.hypot(mouseX - n1.x, mouseY - n1.y);
-              if (leadDist < 85) {
-                const leadAlpha = (1 - leadDist / 85) * Math.pow(n1.life, 1.3) * 0.42;
-                ctx.beginPath();
-                ctx.moveTo(mouseX, mouseY);
-                ctx.lineTo(n1.x, n1.y);
-                ctx.strokeStyle = `rgba(255, 255, 255, ${leadAlpha})`;
-                ctx.lineWidth = 0.85;
-                ctx.stroke();
+          // Expanding silk shockwave halo
+          if (shootProgress < 1.0) {
+            const shockR = currentR * 1.06;
+            ctx.beginPath();
+            ctx.arc(web.x, web.y, shockR, 0, Math.PI * 2);
+            ctx.strokeStyle = `rgba(255, 30, 45, ${(1 - shootProgress) * 0.3})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+
+          // 1. Radial Spokes
+          const spokePoints: { x: number; y: number }[] = [];
+          for (let i = 0; i < web.spokes; i++) {
+            const angle = web.angles[i];
+            const len = currentR * web.spokeLengths[i];
+            const tipX = web.x + Math.cos(angle) * len;
+            const tipY = web.y + Math.sin(angle) * len;
+            spokePoints.push({ x: tipX, y: tipY });
+
+            // Core spoke thread
+            ctx.beginPath();
+            ctx.moveTo(web.x, web.y);
+            ctx.lineTo(tipX, tipY);
+            ctx.strokeStyle = `rgba(255, 255, 255, ${alpha * 0.82})`;
+            ctx.lineWidth = 1.1;
+            ctx.stroke();
+
+            // Spoke tip anchor silk forks (Spiderman web anchor splat at tips, scaled for compact size)
+            if (shootProgress > 0.7) {
+              const forkLen = 7.5 * web.spokeLengths[i] * shootEase;
+              const forkA1 = angle - 0.38;
+              const forkA2 = angle + 0.38;
+              ctx.beginPath();
+              ctx.moveTo(tipX, tipY);
+              ctx.lineTo(tipX + Math.cos(forkA1) * forkLen, tipY + Math.sin(forkA1) * forkLen);
+              ctx.moveTo(tipX, tipY);
+              ctx.lineTo(tipX + Math.cos(forkA2) * forkLen, tipY + Math.sin(forkA2) * forkLen);
+              ctx.strokeStyle = `rgba(255, 30, 45, ${alpha * 0.75})`;
+              ctx.lineWidth = 0.95;
+              ctx.stroke();
+            }
+          }
+
+          // 2. Concentric Spiderweb Rings with iconic inward catenary arcs!
+          for (let r = 1; r <= web.rings; r++) {
+            const ringFraction = r / (web.rings + 0.25);
+            const ringRadius = currentR * ringFraction;
+            if (ringRadius < 5) continue;
+
+            const ringAlpha = alpha * Math.max(0, 1 - (r / web.rings) * 0.28 * fadeProgress);
+            if (ringAlpha <= 0.01) continue;
+
+            for (let i = 0; i < web.spokes; i++) {
+              const nextI = (i + 1) % web.spokes;
+              const a1 = web.angles[i];
+              const a2 = web.angles[nextI];
+              const r1 = ringRadius * web.spokeLengths[i];
+              const r2 = ringRadius * web.spokeLengths[nextI];
+
+              const p1x = web.x + Math.cos(a1) * r1;
+              const p1y = web.y + Math.sin(a1) * r1;
+              const p2x = web.x + Math.cos(a2) * r2;
+              const p2y = web.y + Math.sin(a2) * r2;
+
+              // Inward Sag Control Point (curving towards web center)
+              const midX = (p1x + p2x) / 2;
+              const midY = (p1y + p2y) / 2;
+              const sag = 0.24; // Real spiderweb inward curvature
+              const ctrlX = midX + (web.x - midX) * sag;
+              const ctrlY = midY + (web.y - midY) * sag;
+
+              ctx.beginPath();
+              ctx.moveTo(p1x, p1y);
+              ctx.quadraticCurveTo(ctrlX, ctrlY, p2x, p2y);
+
+              // Alternating ring colors between crisp white silk and crimson silk
+              if (r % 2 === 0) {
+                ctx.strokeStyle = `rgba(255, 255, 255, ${ringAlpha * 0.75})`;
+                ctx.lineWidth = 0.95;
+              } else {
+                ctx.strokeStyle = `rgba(255, 30, 45, ${ringAlpha * 0.88})`;
+                ctx.lineWidth = 1.1;
               }
-            }
-          }
-
-          // 2. Structured Spider-Man Web Burst (Radial spokes + Concentric rings)
-          const SPOKES = 12;
-          const inNodes: (WebNode | null)[] = new Array(SPOKES).fill(null);
-          const outNodes: (WebNode | null)[] = new Array(SPOKES).fill(null);
-
-          for (let i = 0; i < webNodes.length; i++) {
-            const n = webNodes[i];
-            if (n.isClickBurst && n.spokeIndex !== undefined) {
-              if (n.ringLevel === 0 && !inNodes[n.spokeIndex]) inNodes[n.spokeIndex] = n;
-              else if (n.ringLevel === 1 && !outNodes[n.spokeIndex]) outNodes[n.spokeIndex] = n;
-            }
-          }
-
-          // 2a. Draw Radial Spokes: origin -> inner node -> outer node
-          for (let s = 0; s < SPOKES; s++) {
-            const inn = inNodes[s];
-            const out = outNodes[s];
-            if (inn && inn.originX !== undefined && inn.originY !== undefined) {
-              const spokeAlpha = Math.pow(inn.life, 1.3) * 0.45;
-              ctx.beginPath();
-              ctx.moveTo(inn.originX, inn.originY);
-              ctx.lineTo(inn.x, inn.y);
-              if (out) ctx.lineTo(out.x, out.y);
-              ctx.strokeStyle = `rgba(255, 255, 255, ${spokeAlpha})`;
-              ctx.lineWidth = 0.8;
               ctx.stroke();
-            }
-          }
 
-          // 2b. Inner Concentric Web Ring (connects adjacent inner nodes)
-          for (let s = 0; s < SPOKES; s++) {
-            const n1 = inNodes[s];
-            const n2 = inNodes[(s + 1) % SPOKES];
-            if (n1 && n2) {
-              const alpha = Math.min(Math.pow(n1.life, 1.2), Math.pow(n2.life, 1.2)) * 0.42;
+              // Glistening silk droplet at each spoke-ring intersection
               ctx.beginPath();
-              ctx.moveTo(n1.x, n1.y);
-              ctx.lineTo(n2.x, n2.y);
-              ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
-              ctx.lineWidth = 0.75;
-              ctx.stroke();
+              ctx.arc(p1x, p1y, 1.25, 0, Math.PI * 2);
+              ctx.fillStyle = `rgba(255, 255, 255, ${ringAlpha * 0.9})`;
+              ctx.fill();
             }
           }
 
-          // 2c. Outer Concentric Web Ring (connects adjacent outer nodes with crimson tint)
-          for (let s = 0; s < SPOKES; s++) {
-            const n1 = outNodes[s];
-            const n2 = outNodes[(s + 1) % SPOKES];
-            if (n1 && n2) {
-              const alpha = Math.min(Math.pow(n1.life, 1.2), Math.pow(n2.life, 1.2)) * 0.38;
+          // 3. Central Web Impact Knot (Glowing crimson-and-white core)
+          ctx.beginPath();
+          ctx.arc(web.x, web.y, Math.max(1, 5.5 * (1 - fadeProgress * 0.5)), 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 30, 45, ${alpha * 0.3})`;
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.arc(web.x, web.y, Math.max(1, 2.8 * (1 - fadeProgress * 0.4)), 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 30, 45, ${alpha * 0.95})`;
+          ctx.shadowColor = "#ff1e2d";
+          ctx.shadowBlur = 7 * alpha;
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.arc(web.x, web.y, Math.max(0.8, 1.3 * (1 - fadeProgress * 0.4)), 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.98})`;
+          ctx.shadowBlur = 0;
+          ctx.fill();
+
+          ctx.restore();
+        }
+
+        // B. Draw Movement Silk Trail
+        if (motionTrail.length > 1) {
+          ctx.save();
+          ctx.lineCap = "round";
+
+          for (let i = 0; i < motionTrail.length - 1; i++) {
+            const p1 = motionTrail[i];
+            const p2 = motionTrail[i + 1];
+            const dist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+            if (dist < 80) {
+              const alpha = Math.min(p1.life, p2.life) * 0.42;
               ctx.beginPath();
-              ctx.moveTo(n1.x, n1.y);
-              ctx.lineTo(n2.x, n2.y);
-              ctx.strokeStyle = `rgba(255, 45, 60, ${alpha * 0.85})`;
-              ctx.lineWidth = 0.75;
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = `rgba(255, 30, 45, ${alpha})`;
+              ctx.lineWidth = 0.95;
               ctx.stroke();
-            }
-          }
 
-          // 2d. Delicate Spiral Web Strands (inner spoke to next outer spoke)
-          for (let s = 0; s < SPOKES; s++) {
-            const n1 = inNodes[s];
-            const n2 = outNodes[(s + 1) % SPOKES];
-            if (n1 && n2) {
-              const alpha = Math.min(Math.pow(n1.life, 1.3), Math.pow(n2.life, 1.3)) * 0.22;
-              ctx.beginPath();
-              ctx.moveTo(n1.x, n1.y);
-              ctx.lineTo(n2.x, n2.y);
-              ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
-              ctx.lineWidth = 0.55;
-              ctx.stroke();
-            }
-          }
-
-          // 3. Connect Movement Trail Nodes (Only trail to trail, never into click burst)
-          for (let i = 0; i < webNodes.length; i++) {
-            const n1 = webNodes[i];
-            if (n1.isClickBurst) continue;
-
-            for (let j = i + 1; j < webNodes.length; j++) {
-              const n2 = webNodes[j];
-              if (n2.isClickBurst) continue;
-
-              const dist = Math.hypot(n1.x - n2.x, n1.y - n2.y);
-              if (dist < maxTrailDist) {
-                const smoothLife = Math.min(Math.pow(n1.life, 1.25), Math.pow(n2.life, 1.25));
-                const alpha = (1 - dist / maxTrailDist) * smoothLife;
-
-                if (alpha > 0.02) {
+              // Lead thread to current cursor
+              if (i === 0) {
+                const leadDist = Math.hypot(mouseX - p1.x, mouseY - p1.y);
+                if (leadDist < 70) {
+                  const leadAlpha = (1 - leadDist / 70) * p1.life * 0.5;
                   ctx.beginPath();
-                  ctx.moveTo(n1.x, n1.y);
-                  ctx.lineTo(n2.x, n2.y);
-                  if (n1.isCompanion || n2.isCompanion) {
-                    ctx.strokeStyle = `rgba(255, 30, 45, ${alpha * 0.3})`;
-                    ctx.lineWidth = 0.65;
-                  } else {
-                    ctx.strokeStyle = `rgba(255, 255, 255, ${alpha * 0.38})`;
-                    ctx.lineWidth = 0.75;
-                  }
+                  ctx.moveTo(mouseX, mouseY);
+                  ctx.lineTo(p1.x, p1.y);
+                  ctx.strokeStyle = `rgba(255, 255, 255, ${leadAlpha})`;
+                  ctx.lineWidth = 1.0;
                   ctx.stroke();
                 }
               }
             }
+
+            p1.life -= p1.decay;
+            p1.x += p1.vx;
+            p1.y += p1.vy;
           }
 
-          // 4. Draw Crimson Glowing Node Dots (Softer glow & decreased opacity)
-          for (let i = 0; i < webNodes.length; i++) {
-            const node = webNodes[i];
-            const baseRad = node.isClickBurst ? (node.isCompanion ? 2.0 : 2.6) : (node.isCompanion ? 1.6 : 2.3);
-            const radius = baseRad * Math.max(0.2, node.life);
-            const dotAlpha = Math.pow(node.life, 1.2);
-
-            ctx.beginPath();
-            ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 30, 45, ${dotAlpha * 0.62})`;
-            ctx.shadowColor = "#ff1e2d";
-            ctx.shadowBlur = node.isClickBurst ? 5 : 3.5;
-            ctx.fill();
-
-            // Inner subtle pinpoint
-            if (!node.isCompanion && node.life > 0.25) {
-              ctx.beginPath();
-              ctx.arc(node.x, node.y, radius * 0.45, 0, Math.PI * 2);
-              ctx.fillStyle = `rgba(255, 255, 255, ${dotAlpha * 0.55})`;
-              ctx.shadowBlur = 0;
-              ctx.fill();
-            }
-
-            // Decay life smoothly
-            node.life -= node.decay;
-          }
-
-          ctx.shadowBlur = 0;
-
-          // Remove expired nodes
-          for (let i = webNodes.length - 1; i >= 0; i--) {
-            if (webNodes[i].life <= 0) {
-              webNodes.splice(i, 1);
+          // Remove expired trail points
+          for (let i = motionTrail.length - 1; i >= 0; i--) {
+            if (motionTrail[i].life <= 0) {
+              motionTrail.splice(i, 1);
             }
           }
+
+          ctx.restore();
         }
       }
     };
@@ -599,9 +609,9 @@ export function CustomCursor() {
       window.removeEventListener("mouseup", onMouseUp);
       document.removeEventListener("mouseleave", onMouseLeaveWindow);
       document.removeEventListener("mouseenter", onMouseEnterWindow);
-      cleanupHover();
+      document.removeEventListener("mouseover", onMouseOver);
     };
-  }, [isVisible, isHovered]);
+  }, []); // Run ONCE on mount: fixes the circle lag / bugging out!
 
   if (isTouch) return null;
 
@@ -610,14 +620,14 @@ export function CustomCursor() {
       {/* 0. Fullscreen Spider-Web Trail Canvas */}
       <canvas
         ref={canvasRef}
-        className={`cursor-web-canvas ${isVisible ? "visible" : ""}`}
+        className={`cursor-web-canvas ${isVisible && !isDisabled ? "visible" : ""}`}
         aria-hidden="true"
       />
 
       <div
-        className={`cursor-portal ${isVisible ? "visible" : ""} ${isHovered ? "hovered" : ""} ${
-          isClicking ? "clicking" : ""
-        }`}
+        className={`cursor-portal ${isVisible && !isDisabled ? "visible" : ""} ${
+          isHovered ? "hovered" : ""
+        } ${isClicking ? "clicking" : ""}`}
         aria-hidden="true"
       >
         {/* 1. The Core Spider-Man Mask Logo */}
