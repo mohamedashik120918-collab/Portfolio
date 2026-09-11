@@ -5,6 +5,7 @@ import GlassNav from "@/components/ui/glass-nav";
 import CustomCursor from "@/components/ui/custom-cursor";
 import ScrollProgressBar from "@/components/ui/scroll-progress";
 import ThreeSkillCore from "@/components/ui/three-skill-core";
+import SkillsTechStack from "@/components/ui/skills-tech-stack";
 import {
   ArrowUpRight,
   Code2,
@@ -79,7 +80,7 @@ const PROJECTS: Project[] = [
     category: "Full Stack",
     description: "Production client website launched for an electric vehicle charging station infrastructure enterprise, engineered during full-stack internship at Jaz Infotech.",
     tags: ["React.js", "JavaScript (ES6+)", "REST APIs", "Tailwind CSS", "Responsive Design"],
-    image: "/portraits/section3.jpg",
+    image: "/projects/tevolt.jpg",
     demoUrl: "https://tevolt.in",
     githubUrl: "https://github.com",
     highlights: [
@@ -169,49 +170,32 @@ const PROJECTS: Project[] = [
   },
 ];
 
-// Services Data
-const SERVICES = [
+// Exact WHAT I DO Cards (Matching Reference Image)
+const WHAT_I_DO_CARDS = [
   {
-    title: "Full-Stack Web Development",
-    icon: Code2,
-    desc: "End-to-end web applications built with modern architectural standards: JavaScript (ES6+), React.js, Node.js, Express.js, and clean code practices.",
-    skills: ["React.js", "Node.js & Express", "JavaScript (ES6+)", "Full-Stack Architecture"],
+    icon: "🌐",
+    title: "FULL-STACK WEB DEV",
+    desc: "Building fast React.js, Next.js, Vite & Node.js applications with Tailwind CSS.",
   },
   {
-    title: "Frontend Engineering",
-    icon: Layers,
-    desc: "Designing responsive, intuitive, and interactive user interfaces using React.js, HTML5, CSS3, Tailwind CSS, Bootstrap, and modern web standards.",
-    skills: ["React.js", "Tailwind CSS", "Bootstrap", "Responsive Web Design"],
+    icon: "👁️",
+    title: "AI & COMPUTER VISION",
+    desc: "Developing RoomPulse face recognition attendance systems with OpenCV & ESP32-CAM.",
   },
   {
-    title: "Backend & RESTful APIs",
-    icon: Server,
-    desc: "Architecting secure, high-performance REST APIs with Node.js and Express.js, structured JSON data interchange, and Postman testing.",
-    skills: ["Node.js", "Express.js", "REST APIs", "JSON Data Interchange"],
+    icon: "🤖",
+    title: "EMBEDDED IOT & ROBOTICS",
+    desc: "Programming ESP32, Arduino microcontrollers, hardware sensors & automation systems.",
   },
   {
-    title: "Database Engineering",
-    icon: Cpu,
-    desc: "Designing relational schemas and cloud document stores with MySQL and MongoDB Atlas, optimizing queries, indexing, and data integrity.",
-    skills: ["MySQL", "MongoDB Atlas", "Schema Modeling", "Query Optimization"],
+    icon: "⚡",
+    title: "DATABASE & BACKEND",
+    desc: "Structuring backend APIs & cloud storage with MongoDB, PostgreSQL, Supabase & Firebase.",
   },
   {
-    title: "Live Client Platform Launch",
-    icon: Globe,
-    desc: "Converting client business requirements into functional, production-ready web features, exemplified by the live launch of Tevolt (tevolt.in).",
-    skills: ["Client Requirements", "Tevolt (tevolt.in)", "Production Deployment", "Jaz Infotech"],
-  },
-  {
-    title: "Quality Assurance & Testing",
-    icon: Award,
-    desc: "Delivering reliable, bug-free software solutions through rigorous testing, Postman API verification, debugging, and UX performance optimization.",
-    skills: ["Postman API Testing", "Bug Fixing", "Performance Tuning", "UX Reliability"],
-  },
-  {
-    title: "Version Control & Tooling",
-    icon: Terminal,
-    desc: "Standardized modern development workflows using Git, GitHub repository management, VS Code environment, and collaborative version control.",
-    skills: ["Git & GitHub", "VS Code", "Collaborative Workflows", "Branch Management"],
+    icon: "🚀",
+    title: "IEDC TECH LEADERSHIP",
+    desc: "Organizing tech expos, hackathons, AI workshops, gaming tournaments & science exhibitions.",
   },
 ];
 
@@ -395,8 +379,8 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#0a0404] text-white selection:bg-[#ff1e2d] selection:text-white overflow-x-hidden">
-      {/* 1. Hardware-Accelerated Fixed Canvas Scroll Background */}
+    <div className="relative min-h-screen text-white selection:bg-[#ff1e2d] selection:text-white overflow-x-hidden">
+      {/* 1. High-Quality Full-Site Artwork Background Layer */}
       <CinematicScrollCanvas />
 
       {/* 2. Custom Crimson 3D Cursor & Top Tracker */}
@@ -521,11 +505,11 @@ export default function App() {
             ========================================================================= */}
         <section
           id="top"
-          className="relative min-h-screen flex items-center justify-center pt-24 sm:pt-28 pb-16 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16"
+          className="relative min-h-screen flex items-start justify-center pt-20 sm:pt-24 lg:pt-20 pb-16 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16"
         >
-          <div className="max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center">
-            {/* Left Hero Content with Exact Font Styles and Sizes */}
-            <div className="lg:col-span-7 flex flex-col items-start z-20 relative">
+          <div className="max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-start">
+            {/* Left Hero Content with Exact Font Styles and Sizes - Generous space above Hello I'm */}
+            <div className="lg:col-span-7 flex flex-col items-start z-20 relative pt-24 sm:pt-32 lg:pt-48 xl:pt-56">
               {/* Hollow Background Watermark: ASHIK */}
               <div className="bg-portfolio-text" aria-hidden="true">
                 ASHIK
@@ -552,26 +536,29 @@ export default function App() {
                 Emerging Software Developer and Full-Stack Intern at Jaz Infotech with practical experience designing and launching responsive web applications like Tevolt (tevolt.in) and premises management systems. Strong analytical mindset, solid programming fundamentals in JavaScript (ES6+), React.js, Node.js, Express.js, and MySQL, committed to delivering quality software solutions.
               </p>
 
-              {/* Responsive Hero Actions: Full width on mobile, inline on desktop */}
-              <div className="hero-actions w-full sm:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-8">
-                <a href="#contact" className="shimmer-btn justify-center">
+              {/* Exact Action Buttons Placed Directly Under Bio (Reference Photo 2 Layout) */}
+              <div className="flex flex-wrap items-center gap-3 mt-4">
+                <a href="#contact" className="shimmer-btn">
                   <span>GET IN TOUCH</span>
                   <span className="text-sm">⟶</span>
                 </a>
 
-                <a href="mailto:mohamedashik120918@gmail.com" className="shimmer-btn secondary justify-center">
+                <a
+                  href="mailto:mohamedashik120918@gmail.com"
+                  className="shimmer-btn secondary"
+                >
                   <span>DOWNLOAD CV</span>
                   <span>📄</span>
                 </a>
 
-                <div className="badge-worldwide justify-center">
+                <div className="badge-worldwide">
                   <span>📍</span> TIRUNELVELI, TAMIL NADU, INDIA
                 </div>
               </div>
             </div>
 
             {/* Right Hero Showcase: Exact Suspended Lanyard Card at the Right End */}
-            <div className="lg:col-span-5 flex flex-col items-center lg:items-end justify-center relative z-20">
+            <div className="lg:col-span-5 flex flex-col items-center lg:items-end justify-start relative z-20 pt-2 lg:pt-4">
               {/* Exact 3D Suspended Lanyard ID Card */}
               <div className="scale-90 sm:scale-95 lg:scale-100 origin-top lg:origin-top-right">
                 <LanyardIdCard />
@@ -587,6 +574,53 @@ export default function App() {
                   Building responsive web applications, developing live client platforms like Tevolt (tevolt.in), and architecting full-stack solutions with React.js &amp; Node.js.
                 </p>
               </div>
+
+              {/* Exact Reference 3-Item Stats Counter Stack Placed Directly Under Quote Card */}
+              <div className="w-full max-w-sm flex flex-col mt-4">
+                {/* Stat 1: Education */}
+                <div className="grid grid-cols-[105px_1fr] sm:grid-cols-[120px_1fr] items-center gap-4 py-3 sm:py-4 border-b border-white/15 group">
+                  <div
+                    className="text-4xl sm:text-5xl font-black text-[#ff1e2d] tracking-tight leading-[0.82] text-left group-hover:scale-105 transition-transform select-none"
+                    style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+                  >
+                    <div>FINAL</div>
+                    <div>YR</div>
+                  </div>
+                  <div className="text-[11px] sm:text-[12px] font-bold uppercase tracking-wider text-zinc-300 leading-tight text-left">
+                    <div>B.SC CS @</div>
+                    <div>SADAKATHULLAH</div>
+                    <div>APPA COLLEGE</div>
+                  </div>
+                </div>
+
+                {/* Stat 2: Projects */}
+                <div className="grid grid-cols-[105px_1fr] sm:grid-cols-[120px_1fr] items-center gap-4 py-3 sm:py-4 border-b border-white/15 group">
+                  <div
+                    className="text-4xl sm:text-5xl font-black text-[#ff1e2d] tracking-tight leading-none text-left group-hover:scale-105 transition-transform select-none"
+                    style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+                  >
+                    4+
+                  </div>
+                  <div className="text-[11px] sm:text-[12px] font-bold uppercase tracking-wider text-zinc-300 leading-tight text-left">
+                    <div>FEATURED</div>
+                    <div>PROJECTS</div>
+                  </div>
+                </div>
+
+                {/* Stat 3: Work Experience */}
+                <div className="grid grid-cols-[105px_1fr] sm:grid-cols-[120px_1fr] items-center gap-4 py-3 sm:py-4 border-b border-white/15 group">
+                  <div
+                    className="text-4xl sm:text-5xl font-black text-[#ff1e2d] tracking-tight leading-none text-left group-hover:scale-105 transition-transform select-none"
+                    style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+                  >
+                    JAZ
+                  </div>
+                  <div className="text-[11px] sm:text-[12px] font-bold uppercase tracking-wider text-zinc-300 leading-tight text-left">
+                    <div>FULL-STACK INTERN</div>
+                    <div>&amp; WEB DEVELOPER</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -596,62 +630,69 @@ export default function App() {
         {/* =========================================================================
             SERVICES SECTION
             ========================================================================= */}
-        <section id="services" className="py-16 sm:py-20 lg:py-28 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16" data-reveal>
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
-              <div className="section-kicker justify-center">
-                <i /> SERVICES & EXPERTISE
-              </div>
-              <h2 className="section-title">
-                Architectural <span className="gradient-crimson-text">Capabilities.</span>
-              </h2>
-              <p className="text-xs sm:text-sm text-zinc-400 mt-3 sm:mt-4 leading-relaxed font-normal">
-                Comprehensive technical mastery across client-facing web applications, computer vision pipelines, IoT embedded hardware, and high-throughput backend APIs.
-              </p>
+        {/* =========================================================================
+            WHAT I DO SECTION (Exact Reference Photo Layout with Centered Portrait)
+            ========================================================================= */}
+        <section
+          id="services"
+          className="relative pt-8 sm:pt-10 pb-16 sm:pb-24 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 overflow-hidden bg-[#060203]"
+          data-reveal
+        >
+          {/* Ambient red atmospheric glow across the whole width matching reference */}
+          <div className="absolute inset-0 pointer-events-none z-0">
+            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[600px] bg-[radial-gradient(ellipse_at_center,rgba(220,20,35,0.28)_0%,rgba(140,10,20,0.12)_45%,transparent_70%)] filter blur-2xl" />
+          </div>
+
+          {/* Header Bar: Red Square + WHAT I DO & Full-width Divider Line */}
+          <div className="max-w-[1400px] mx-auto relative z-20 mb-1">
+            <div className="flex items-center gap-2.5 text-xs sm:text-[13px] font-mono font-bold tracking-[0.2em] text-white uppercase mb-3">
+              <span className="w-2.5 h-2.5 bg-[#ff1e2d] rounded-xs inline-block shadow-[0_0_10px_#ff1e2d]" />
+              <span>WHAT I DO</span>
+            </div>
+            <div className="w-full h-px bg-white/10" />
+          </div>
+
+          {/* Stage Container: Background Portrait + 5 Overlaid Cards */}
+          <div className="max-w-[1400px] mx-auto relative z-10">
+            {/* Exact Background Portrait: Mohamed in Sunglasses with Red Rim Lighting (section3.jpg) */}
+            <div className="absolute inset-x-0 -top-6 sm:-top-8 flex items-start justify-center pointer-events-none overflow-hidden z-0">
+              <img
+                // src="/portraits/section3.jpg"
+                alt="Mohamed Ashik in Sunglasses"
+                className="w-full max-w-[860px] lg:max-w-[960px] xl:max-w-[1040px] h-[580px] sm:h-[640px] md:h-[720px] lg:h-[760px] object-cover object-[50%_24%] filter contrast-120 brightness-100 opacity-95"
+              />
+              {/* Vignettes to seamlessly dissolve edges into the section background */}
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,transparent_45%,#060203_85%)] pointer-events-none" />
+              <div className="absolute inset-y-0 left-0 w-32 sm:w-64 bg-gradient-to-r from-[#060203] via-[#060203]/70 to-transparent pointer-events-none" />
+              <div className="absolute inset-y-0 right-0 w-32 sm:w-64 bg-gradient-to-l from-[#060203] via-[#060203]/70 to-transparent pointer-events-none" />
+              <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-[#060203] via-[#060203]/80 to-transparent pointer-events-none" />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
-              {SERVICES.map((srv, idx) => {
-                const IconComponent = srv.icon;
-                return (
-                  <div
-                    key={srv.title}
-                    className="glass-card glass-card-glow p-6 sm:p-8 flex flex-col justify-between group"
-                    style={{ transitionDelay: `${idx * 50}ms` }}
-                  >
-                    <div>
-                      <div className="w-12 h-12 rounded-xl bg-[#ff1e2d]/10 border border-[#ff1e2d]/40 flex items-center justify-center text-[#ff1e2d] mb-6 group-hover:scale-110 group-hover:bg-[#ff1e2d] group-hover:text-white transition-all shadow-[0_0_20px_rgba(255,30,45,0.2)]">
-                        <IconComponent className="w-6 h-6" />
-                      </div>
-                      <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider block mb-1">
-                        0{idx + 1} // SPECIALIZATION
-                      </span>
-                      <h3
-                        className="text-2xl font-black uppercase text-white mb-3 tracking-tight group-hover:text-[#ff1e2d] transition-colors"
-                        style={{ fontFamily: "'Outfit', sans-serif" }}
-                      >
-                        {srv.title}
-                      </h3>
-                      <p className="text-xs text-zinc-400 leading-relaxed font-normal mb-6">
-                        {srv.desc}
-                      </p>
-                    </div>
+            {/* Precise spacer so hair, sunglasses, nose and red rim-light portrait are visible above cards */}
+            <div className="h-44 sm:h-52 md:h-60 lg:h-64" />
 
-                    <div className="border-t border-white/10 pt-4 mt-2">
-                      <div className="flex flex-wrap gap-1.5">
-                        {srv.skills.map((sk) => (
-                          <span
-                            key={sk}
-                            className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-white/5 border border-white/10 text-zinc-300"
-                          >
-                            {sk}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+            {/* Exact 5-Card Row from Reference Image */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4 xl:gap-5 items-stretch relative z-10">
+              {WHAT_I_DO_CARDS.map((card, idx) => (
+                <div
+                  key={card.title}
+                  className="rounded-2xl p-6 sm:p-7 bg-[#0e090a]/92 hover:bg-[#180e10]/95 border border-white/10 hover:border-[#ff1e2d]/60 transition-all duration-300 backdrop-blur-md flex flex-col justify-start group hover:-translate-y-1 hover:shadow-[0_12px_35px_rgba(255,30,45,0.25)] min-h-[250px]"
+                  style={{ transitionDelay: `${idx * 40}ms` }}
+                >
+                  <div className="text-2xl sm:text-[28px] mb-5 select-none flex items-center group-hover:scale-110 transition-transform duration-200">
+                    {card.icon}
                   </div>
-                );
-              })}
+                  <h3
+                    className="text-xs sm:text-[13px] font-black uppercase text-white tracking-wider mb-3 leading-snug group-hover:text-[#ff1e2d] transition-colors"
+                    style={{ fontFamily: "'Outfit', sans-serif" }}
+                  >
+                    {card.title}
+                  </h3>
+                  <p className="text-[12px] sm:text-[12.5px] text-zinc-400 font-normal leading-relaxed">
+                    {card.desc}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -856,72 +897,11 @@ export default function App() {
         <div className="section-seam" />
 
         {/* =========================================================================
-            SKILLS SECTION
+            SKILLS & TECH STACK SECTION (Exact Reference Photo Layout)
             ========================================================================= */}
         <section id="skills" className="py-16 sm:py-20 lg:py-28 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16" data-reveal>
           <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-              {/* Left Column: 3D Interactive WebGL Skill Core */}
-              <div className="lg:col-span-5 flex flex-col items-center">
-                <div className="w-full">
-                  <div className="section-kicker">
-                    <i /> TECHNICAL STACK
-                  </div>
-                  <h2 className="section-title mb-4">
-                    Interactive <span className="gradient-crimson-text">Skill Core.</span>
-                  </h2>
-                  <p className="text-xs text-zinc-400 mb-6 leading-relaxed">
-                    Rotate and interact with the 3D WebGL core below to inspect the multi-faceted architectural stack supporting modern frontends, high-speed backends, and embedded vision systems.
-                  </p>
-                </div>
-
-                <div className="w-full h-64 sm:h-72 lg:h-80 rounded-2xl overflow-hidden border border-[#ff1e2d]/30 bg-black/60 shadow-[0_15px_40px_rgba(0,0,0,0.8)] backdrop-blur-xl">
-                  <ThreeSkillCore />
-                </div>
-              </div>
-
-              {/* Right Column: 20 Technologies Icon & Badge Grid */}
-              <div className="lg:col-span-7">
-                <div className="flex items-center justify-between mb-6 pb-2 border-b border-white/10">
-                  <span className="text-xs font-mono text-zinc-400 uppercase tracking-widest">
-                    // 20 CORE TECHNOLOGIES & TOOLCHAINS
-                  </span>
-                  <span className="text-xs font-mono text-[#ff1e2d] font-bold">
-                    60 FPS INTERACTIVE
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                  {SKILLS_LIST.map((sk) => (
-                    <div
-                      key={sk.name}
-                      className="p-3.5 rounded-xl bg-black/60 border border-white/10 hover:border-[#ff1e2d]/60 hover:bg-[#ff1e2d]/10 transition-all duration-300 group cursor-default backdrop-blur-md"
-                    >
-                      <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">
-                          {sk.category}
-                        </span>
-                        <span className="text-[10px] font-mono text-[#ff4d5a] font-bold">
-                          {sk.level}
-                        </span>
-                      </div>
-                      <div
-                        className="text-sm font-black uppercase text-white group-hover:text-[#ff1e2d] transition-colors truncate"
-                        style={{ fontFamily: "'Outfit', sans-serif" }}
-                      >
-                        {sk.name}
-                      </div>
-                      <div className="w-full h-1 bg-white/10 rounded-full mt-2 overflow-hidden">
-                        <div
-                          className="h-full bg-gradient-to-r from-[#ff1e2d] to-[#ff5c68] rounded-full group-hover:shadow-[0_0_8px_#ff1e2d] transition-all duration-300"
-                          style={{ width: sk.level }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+            <SkillsTechStack />
           </div>
         </section>
 

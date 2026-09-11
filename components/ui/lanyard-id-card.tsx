@@ -385,55 +385,7 @@ export default function LanyardIdCard() {
               flexDirection: "column",
             }}
           >
-            {/* Top-Left Constellation / Network Emblem (Matches Reference) */}
-            <div
-              className="card-network-emblem"
-              style={{
-                position: "absolute",
-                top: "-4px",
-                left: "-6px",
-                width: "74px",
-                height: "90px",
-                zIndex: 10,
-                pointerEvents: "none",
-              }}
-            >
-              <svg width="74" height="90" viewBox="0 0 74 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-                {/* Connecting Web / Filament Lines */}
-                <line x1="32" y1="26" x2="42" y2="64" stroke="rgba(255, 120, 130, 0.45)" strokeWidth="0.75" />
-                <line x1="18" y1="20" x2="42" y2="64" stroke="rgba(255, 120, 130, 0.4)" strokeWidth="0.7" />
-                <line x1="6" y1="30" x2="42" y2="64" stroke="rgba(255, 120, 130, 0.3)" strokeWidth="0.6" />
-                <line x1="6" y1="30" x2="18" y2="20" stroke="rgba(255, 190, 200, 0.7)" strokeWidth="0.85" />
-                <line x1="18" y1="20" x2="32" y2="26" stroke="rgba(255, 190, 200, 0.7)" strokeWidth="0.85" />
-                <line x1="32" y1="26" x2="45" y2="30" stroke="rgba(255, 190, 200, 0.7)" strokeWidth="0.85" />
-                <line x1="42" y1="64" x2="28" y2="84" stroke="rgba(255, 120, 130, 0.35)" strokeWidth="0.6" strokeDasharray="2 2" />
-                <line x1="6" y1="30" x2="2" y2="86" stroke="rgba(255, 120, 130, 0.25)" strokeWidth="0.5" strokeDasharray="2 3" />
-
-                {/* Outer Glowing Circle Emblem */}
-                <circle cx="27" cy="26" r="23" stroke="rgba(235, 30, 50, 0.85)" strokeWidth="1.6" />
-                <circle cx="27" cy="26" r="23" fill="rgba(220, 20, 40, 0.2)" />
-                <circle cx="27" cy="26" r="18" stroke="rgba(255, 255, 255, 0.25)" strokeWidth="0.7" strokeDasharray="3 3" />
-
-                {/* Glowing Red Nodes with Specular Highlights */}
-                <circle cx="6" cy="30" r="4.5" fill="#e51025" filter="drop-shadow(0 0 5px #ff3344)" />
-                <circle cx="6" cy="30" r="1.6" fill="#ffffff" />
-
-                <circle cx="18" cy="20" r="5" fill="#e51025" filter="drop-shadow(0 0 6px #ff3344)" />
-                <circle cx="18" cy="20" r="1.9" fill="#ffffff" />
-
-                <circle cx="32" cy="26" r="4.5" fill="#e51025" filter="drop-shadow(0 0 5px #ff3344)" />
-                <circle cx="32" cy="26" r="1.6" fill="#ffffff" />
-
-                <circle cx="45" cy="30" r="3.8" fill="#e51025" filter="drop-shadow(0 0 4px #ff3344)" />
-                <circle cx="45" cy="30" r="1.3" fill="#ffffff" />
-
-                {/* Lower Hanging Web Node */}
-                <circle cx="42" cy="64" r="3.5" fill="#e51025" filter="drop-shadow(0 0 4px #ff3344)" />
-                <circle cx="42" cy="64" r="1.3" fill="#ffffff" />
-              </svg>
-            </div>
-
-            {/* Photo Wrap with Mohamed Ashik's Crimson Studio Portrait */}
+            {/* Photo Wrap with Mohamed Ashik's Crimson Studio Portrait - Neatly positioned with headroom */}
             <div
               className="card-photo-wrap"
               style={{
@@ -444,18 +396,19 @@ export default function LanyardIdCard() {
                 overflow: "hidden",
                 display: "flex",
                 justifyContent: "center",
+                background: "radial-gradient(ellipse at 50% 30%, #4a060b 0%, #1a0204 70%, #080001 100%)",
               }}
             >
               <img
-                src="/portraits/ashik_id_card_bg.jpg"
+                src="/portraits/idcard.png"
                 alt="Mohamed Ashik"
                 style={{
                   width: "100%",
                   height: "100%",
                   objectFit: "cover",
-                  objectPosition: "50% 12%",
-                  transform: "scale(1.2)",
-                  transformOrigin: "center 22%",
+                  objectPosition: "50% 0%",
+                  transform: "translateY(18px) scale(0.95)",
+                  transformOrigin: "center top",
                   pointerEvents: "none",
                   filter: "contrast(1.04) brightness(1.02)",
                 }}
