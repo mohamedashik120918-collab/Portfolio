@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import FRAME_PATHS from "@/src/data/video-frames.json";
+import FRAME_PATHS from "@/src/data/video-frames";
 
 interface ScrollVideoAnimationProps {
   id?: string;
@@ -63,23 +63,16 @@ export default function ScrollVideoAnimation({
     const imgAspect = imgW / imgH;
     const canvasAspect = canvasW / canvasH;
 
-    let renderW: number;
-    let renderH: number;
-    let offsetX: number;
-    let offsetY: number;
+    // 14. Contain-style scaling: render complete image inside canvas without cropping
+    const scale = Math.min(canvasW / imgW, canvasH / imgH);
+    const renderW = imgW * scale;
+    const renderH = imgH * scale;
+    // 15. Center the image horizontally and vertically
+    const offsetX = (canvasW - renderW) / 2;
+    const offsetY = (canvasH - renderH) / 2;
 
-    // "cover" math: fill canvas completely without stretching or distorting
-    if (canvasAspect > imgAspect) {
-      renderW = canvasW;
-      renderH = canvasW / imgAspect;
-      offsetX = 0;
-      offsetY = (canvasH - renderH) / 2;
-    } else {
-      renderH = canvasH;
-      renderW = canvasH * imgAspect;
-      offsetX = (canvasW - renderW) / 2;
-      offsetY = 0;
-    }
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
 
     ctx.fillStyle = "#0c0204";
     ctx.fillRect(0, 0, canvasW, canvasH);

@@ -6,6 +6,7 @@ import CustomCursor from "@/components/ui/custom-cursor";
 import ScrollProgressBar from "@/components/ui/scroll-progress";
 import ThreeSkillCore from "@/components/ui/three-skill-core";
 import SkillsTechStack from "@/components/ui/skills-tech-stack";
+import SpidermanScrollTop from "@/components/ui/spiderman-scroll-top";
 import {
   ArrowUpRight,
   Code2,
@@ -95,7 +96,7 @@ const PROJECTS: Project[] = [
     category: "Full Stack",
     description: "Full-stack property and tenant management system featuring automated lease tracking, rent collection telemetry, and cloud database persistence.",
     tags: ["React.js", "Node.js", "Express.js", "MongoDB Atlas", "REST APIs"],
-    image: "/portraits/section1.jpg",
+    image: "/projects/pms.png",
     demoUrl: "#contact",
     githubUrl: "https://github.com",
     highlights: [
@@ -616,6 +617,9 @@ export default function App() {
           <span className="dock-tooltip">Download CV</span>
         </a>
       </div>
+
+      {/* 5c. Floating Spider-Man Scroll-To-Top Button with Cinematic Web Pull */}
+      <SpidermanScrollTop />
 
       {/* 6. MAIN CONTENT WRAPPER */}
       <main className="relative z-10">

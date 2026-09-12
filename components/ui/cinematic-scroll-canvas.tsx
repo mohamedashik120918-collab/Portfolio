@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useCallback } from "react";
-import FRAME_PATHS from "@/src/data/video-frames.json";
+import FRAME_PATHS from "@/src/data/video-frames";
 
 export default function CinematicScrollCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -45,25 +45,13 @@ export default function CinematicScrollCanvas() {
     const imgAspect = imgW / imgH;
     const canvasAspect = canvasW / canvasH;
 
-    let renderW: number;
-    let renderH: number;
-    let offsetX: number;
-    let offsetY: number;
-
-    // "cover" mode: preserve aspect ratio, zero stretching, center face prominently
-    if (canvasAspect > imgAspect) {
-      renderW = canvasW;
-      renderH = canvasW / imgAspect;
-      offsetX = 0;
-      // Vertically position to keep face clearly in the upper-mid view
-      offsetY = (canvasH - renderH) * 0.15;
-    } else {
-      renderH = canvasH;
-      renderW = canvasH * imgAspect;
-      // Horizontally center so Mohamed's face is right in the focal area
-      offsetX = (canvasW - renderW) / 2;
-      offsetY = 0;
-    }
+    // 14. Contain-style scaling: render complete image inside canvas without cropping
+    const scale = Math.min(canvasW / imgW, canvasH / imgH);
+    const renderW = imgW * scale;
+    const renderH = imgH * scale;
+    // 15. Center the image horizontally and vertically
+    const offsetX = (canvasW - renderW) / 2;
+    const offsetY = (canvasH - renderH) / 2;
 
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = "high";
@@ -216,15 +204,11 @@ export default function CinematicScrollCanvas() {
         style={{
           transform: "translateZ(0)",
           willChange: "transform",
-          filter: "contrast(106%) saturate(106%) brightness(102%)",
         }}
       />
 
-      {/* Subtle edge vignette that frames the portrait without dimming Mohamed Ashik's face */}
-      <div className="absolute inset-0 bg-radial from-transparent via-transparent to-black/60 pointer-events-none" />
-
-      {/* Very gentle side shadows to keep text cards and buttons readable without washing out the face */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/30 pointer-events-none" />
+      {/* Subtle soft edge blend so letterboxed edges transition naturally into the site */}
+      <div className="absolute inset-0 bg-radial from-transparent via-transparent to-[#0a0204]/70 pointer-events-none" />
       <div className="absolute inset-0 bg-gradient-to-t from-[#0a0204]/80 via-transparent to-[#0a0204]/40 pointer-events-none" />
     </div>
   );

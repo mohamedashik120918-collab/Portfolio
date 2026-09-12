@@ -871,3 +871,21 @@ button {
     margin: 40px 0;
   }
 }
+
+/* Spider-Man Scroll-To-Top Button */
+@keyframes spiderFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.spiderman-scroll-btn {
+  animation: spiderFloat 4s ease-in-out infinite;
+}
+
+.spiderman-scroll-btn:hover {
+  animation-play-state: paused;
+}
