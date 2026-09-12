@@ -498,7 +498,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen text-white selection:bg-[#ff1e2d] selection:text-white overflow-x-hidden">
+    <div className="relative min-h-screen text-white selection:bg-[#ff1e2d] selection:text-white overflow-x-clip">
       {/* 1. High-Quality Full-Site Artwork Background Layer */}
       <CinematicScrollCanvas />
 
@@ -774,7 +774,7 @@ export default function App() {
               {WHAT_I_DO_CARDS.map((card, idx) => (
                 <div
                   key={card.title}
-                  className="rounded-2xl p-6 sm:p-7 bg-[#0e090a]/92 hover:bg-[#180e10]/95 border border-white/10 hover:border-[#ff1e2d]/60 transition-all duration-300 backdrop-blur-md flex flex-col justify-start group hover:-translate-y-1 hover:shadow-[0_12px_35px_rgba(255,30,45,0.25)] min-h-[250px]"
+                  className="rounded-2xl p-6 sm:p-7 bg-[#0e090a]/75 hover:bg-[#180e10]/85 border border-white/10 hover:border-[#ff1e2d]/60 transition-all duration-300 backdrop-blur-md flex flex-col justify-start group hover:-translate-y-1 hover:shadow-[0_12px_35px_rgba(255,30,45,0.25)] min-h-[250px]"
                   style={{ transitionDelay: `${idx * 40}ms` }}
                 >
                   <div className="text-2xl sm:text-[28px] mb-5 select-none flex items-center group-hover:scale-110 transition-transform duration-200">
