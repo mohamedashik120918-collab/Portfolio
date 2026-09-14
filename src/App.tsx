@@ -67,6 +67,7 @@ interface Project {
   description: string;
   tags: string[];
   image?: string;
+  imageClassName?: string;
   demoUrl: string;
   githubUrl: string;
   highlights: string[];
@@ -107,95 +108,67 @@ const PROJECTS: Project[] = [
     featured: true,
   },
   {
-    id: "portfolio-website",
-    title: "Mohamed Ashik Luxury Portfolio",
+    id: "nila-tiles-studio",
+    title: "Nila Tiles — Ceramic & Decor Studio",
     category: "Full Stack",
-    description: "High-performance developer portfolio featuring interactive 3D lanyard physics, zero-lag canvas scroll synchronization, and crimson glassmorphism UI.",
-    tags: ["React", "TypeScript", "Three.js", "Tailwind CSS", "Canvas API"],
-    image: "/portraits/section2.jpg",
-    demoUrl: "#top",
+    description: "Modern architectural tile showcase and digital catalog platform engineered for Chennai homeowners and contractors, featuring interactive project previews and real-time quote telemetry.",
+    tags: ["React.js", "TypeScript", "Tailwind CSS", "Interactive 3D", "REST APIs"],
+    image: "/projects/nila-tiles.png",
+    imageClassName: "object-top",
+    demoUrl: "#contact",
     githubUrl: "https://github.com",
     highlights: [
-      "Hardware-accelerated dynamic portrait scroll synchronization",
-      "Interactive 3D pendulum lanyard ID card simulation",
-      "Ultra-responsive modern layout with 60 FPS hardware acceleration"
+      "Interactive 3D project showcase with touch swipe & room finish previews",
+      "Integrated instant WhatsApp consultation & dynamic quote request pipeline",
+      "High-performance responsive catalog with Chennai showroom availability tracking"
     ],
     featured: true,
   },
   {
-    id: "fintech-ledger-engine",
-    title: "MySQL Ledger & REST API Engine",
+    id: "crm-pro-platform",
+    title: "CRM Pro — Enterprise Sales & Analytics",
     category: "Full Stack",
-    description: "High-performance backend financial ledger and billing engine with relational database transaction management, schema optimization, and Postman-tested endpoints.",
-    tags: ["Node.js", "Express.js", "MySQL", "REST APIs", "Postman"],
-    image: "/portraits/section4.jpg",
+    description: "Enterprise-grade Customer Relationship Management (CRM) platform featuring real-time revenue telemetry, visual Kanban deal pipelines, lead conversion tracking, and multi-tenant analytics.",
+    tags: ["React.js", "React Router", "Recharts", "Tailwind CSS", "REST APIs"],
+    image: "/projects/crm-dashboard.jpg",
+    imageClassName: "object-top",
     demoUrl: "#contact",
     githubUrl: "https://github.com",
     highlights: [
-      "Relational database modeling with ACID-compliant MySQL schemas",
-      "Postman collection-tested RESTful endpoints with sub-50ms latency",
-      "Structured JSON data interchange with robust error handling"
-    ],
-  },
-  {
-    id: "ai-vision-attendance",
-    title: "AI Vision Telemetry & Detection",
-    category: "AI & CV",
-    description: "Automated biometric facial detection and verification platform exploring intelligent image processing, webcam telemetry, and web dashboard integration.",
-    tags: ["JavaScript", "React.js", "Node.js", "REST APIs", "JSON"],
-    image: "/projects/ai_attendance.jpg",
-    demoUrl: "#contact",
-    githubUrl: "https://github.com",
-    highlights: [
-      "Real-time webcam telemetry stream processing",
-      "RESTful API integration for biometric record logging",
-      "Dynamic administrative interface built with React.js"
+      "Interactive analytics dashboard with Recharts revenue telemetry & lead metrics",
+      "Visual Kanban sales pipeline for drag-and-drop deal stage management",
+      "Comprehensive contact & activity drawer with automated notification workflows"
     ],
     featured: true,
-  },
-  {
-    id: "responsive-client-suite",
-    title: "Cross-Platform Mobile-Web Suite",
-    category: "Mobile & IoT",
-    description: "Cross-platform responsive mobile-first web application designed with fluid touch micro-interactions, Bootstrap and Tailwind CSS layout systems.",
-    tags: ["React.js", "Bootstrap", "Tailwind CSS", "Mobile-First", "JSON"],
-    image: "/portraits/section6.jpg",
-    demoUrl: "#contact",
-    githubUrl: "https://github.com",
-    highlights: [
-      "Mobile-first responsive architecture supporting all screen aspect ratios",
-      "Intuitive touch micro-interactions and optimized asset delivery",
-      "Seamless API data interchange and persistent state"
-    ],
   },
 ];
 
-// Exact WHAT I DO Cards (Matching Reference Image)
+// Exact WHAT I DO Cards (Tailored Directly to Mohamed Ashik's Resume)
 const WHAT_I_DO_CARDS = [
   {
     icon: "🌐",
-    title: "FULL-STACK WEB DEV",
-    desc: "Building fast React.js, Next.js, Vite & Node.js applications with Tailwind CSS.",
-  },
-  {
-    icon: "👁️",
-    title: "AI & COMPUTER VISION",
-    desc: "Developing RoomPulse face recognition attendance systems with OpenCV & ESP32-CAM.",
-  },
-  {
-    icon: "🤖",
-    title: "EMBEDDED IOT & ROBOTICS",
-    desc: "Programming ESP32, Arduino microcontrollers, hardware sensors & automation systems.",
+    title: "FRONTEND WEB DEV",
+    desc: "Building responsive, interactive web interfaces using React.js, Tailwind CSS, Bootstrap & modern HTML5/CSS3.",
   },
   {
     icon: "⚡",
-    title: "DATABASE & BACKEND",
-    desc: "Structuring backend APIs & cloud storage with MongoDB, PostgreSQL, Supabase & Firebase.",
+    title: "BACKEND & REST APIS",
+    desc: "Engineering server-side architectures, RESTful API endpoints, and structured JSON data interchange with Node.js & Express.js.",
+  },
+  {
+    icon: "🗄️",
+    title: "DATABASE MANAGEMENT",
+    desc: "Modeling relational database schemas with MySQL and integrating cloud storage solutions with MongoDB Atlas.",
   },
   {
     icon: "🚀",
-    title: "IEDC TECH LEADERSHIP",
-    desc: "Organizing tech expos, hackathons, AI workshops, gaming tournaments & science exhibitions.",
+    title: "CLIENT WEB PRODUCTION",
+    desc: "Developing and launching live client platforms like Tevolt (tevolt.in), converting business requirements into robust web features.",
+  },
+  {
+    icon: "🛠️",
+    title: "TESTING & OPTIMIZATION",
+    desc: "API endpoint validation via Postman, testing & debugging, performance optimization, and Git/GitHub version control.",
   },
 ];
 
@@ -520,16 +493,27 @@ export default function App() {
           {/* Subtle Ambient Red Glow */}
           <div className="absolute w-[50vw] h-[50vw] rounded-full bg-radial from-[#ff1e2d]/25 to-transparent blur-3xl pointer-events-none" />
 
-          {/* Monogram / Logo */}
+          {/* Spider-Man Logo Badge */}
           <div className="relative z-10 flex flex-col items-center">
-            <div className="relative w-20 h-20 rounded-full border-2 border-[#ff1e2d]/60 flex items-center justify-center mb-6 shadow-[0_0_35px_rgba(255,30,45,0.6)]">
-              <span
-                className="text-2xl font-black tracking-widest text-white"
-                style={{ fontFamily: "'Outfit', sans-serif" }}
-              >
-                MA
-              </span>
-              <div className="absolute -inset-1.5 rounded-full border border-[#ff1e2d]/30 animate-spin" />
+            <div className="relative w-20 h-20 sm:w-24 sm:h-24 mb-6 flex items-center justify-center">
+              {/* Outer Rotating Glowing Crimson Ring */}
+              <div
+                className="absolute -inset-2 rounded-full border border-dashed border-[#ff1e2d]/60 animate-spin pointer-events-none"
+                style={{ animationDuration: "8s" }}
+              />
+              <div className="absolute -inset-1 rounded-full border border-[#ff1e2d]/30 animate-pulse pointer-events-none" />
+
+              {/* Spider-Man Circular Badge */}
+              <div className="relative w-full h-full rounded-full border-2 border-[#ff1e2d] shadow-[0_0_35px_rgba(255,30,45,0.8),inset_0_0_15px_rgba(255,30,45,0.4)] bg-[#0d0305] overflow-hidden flex items-center justify-center">
+                <img
+                  src="/assets/spiderman-badge.png"
+                  alt="Spider-Man Badge"
+                  className="w-full h-full object-cover rounded-full select-none pointer-events-none"
+                  draggable={false}
+                />
+                {/* Subtle Glass Reflection */}
+                <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/25 via-transparent to-black/35 pointer-events-none" />
+              </div>
             </div>
 
             <h1
@@ -609,12 +593,13 @@ export default function App() {
         </a>
 
         <a
-          href="mailto:mohamedashik120918@gmail.com"
+          href="/assets/Mohamed_Resume.docx"
+          download="Mohamed_Resume.docx"
           className="dock-item"
-          aria-label="Download CV"
+          aria-label="Download Resume"
         >
           <FileText className="w-5 h-5" />
-          <span className="dock-tooltip">Download CV</span>
+          <span className="dock-tooltip">Download Resume</span>
         </a>
       </div>
 
@@ -667,10 +652,11 @@ export default function App() {
                 </a>
 
                 <a
-                  href="mailto:mohamedashik120918@gmail.com"
+                  href="/assets/Mohamed_Resume.docx"
+                  download="Mohamed_Resume.docx"
                   className="shimmer-btn secondary"
                 >
-                  <span>DOWNLOAD CV</span>
+                  <span>DOWNLOAD RESUME</span>
                   <span>📄</span>
                 </a>
 
@@ -702,12 +688,13 @@ export default function App() {
               <div className="w-full max-w-sm flex flex-col mt-4">
                 {/* Stat 1: Education */}
                 <div className="grid grid-cols-[105px_1fr] sm:grid-cols-[120px_1fr] items-center gap-4 py-3 sm:py-4 border-b border-white/15 group">
-                  <div
-                    className="text-4xl sm:text-5xl font-black text-[#ff1e2d] tracking-tight leading-[0.82] text-left group-hover:scale-105 transition-transform select-none"
-                    style={{ fontFamily: "'Bebas Neue', sans-serif" }}
-                  >
-                    <div>GRADUATE</div>
-                    <div></div>
+                  <div className="flex items-center justify-start group-hover:scale-105 transition-transform duration-300 origin-left">
+                    <img
+                      src="/assets/graduation-cap.png"
+                      alt="Graduation Cap"
+                      className="h-12 sm:h-14 w-auto max-w-[95px] object-contain filter drop-shadow-[0_4px_18px_rgba(255,30,45,0.5)] select-none pointer-events-none"
+                      draggable={false}
+                    />
                   </div>
                   <div className="text-[11px] sm:text-[12px] font-bold uppercase tracking-wider text-zinc-300 leading-tight text-left">
                     <div>B.SC CS @</div>
@@ -884,7 +871,7 @@ export default function App() {
                       <img
                         src={p.image || "/portraits/section1.jpg"}
                         alt={p.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter contrast-105"
+                        className={`w-full h-full object-cover ${p.imageClassName || "object-center"} group-hover:scale-105 transition-transform duration-500 filter contrast-105`}
                         loading="lazy"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#0a0404] via-transparent to-black/40 pointer-events-none" />
