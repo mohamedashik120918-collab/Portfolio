@@ -745,7 +745,7 @@ export default function App() {
             ========================================================================= */}
         <section
           id="services"
-          className="relative pt-8 sm:pt-10 pb-16 sm:pb-24 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-28"
+          className="relative pt-8 sm:pt-10 pb-16 sm:pb-24 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-28 scroll-mt-24"
           data-reveal
         >
           {/* Header Bar: Red Square + WHAT I DO & Full-width Divider Line */}
@@ -791,7 +791,7 @@ export default function App() {
         {/* =========================================================================
             PROJECTS SECTION (HORIZONTAL SLIDER)
             ========================================================================= */}
-        <section id="projects" className="py-16 sm:py-20 lg:py-28 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-28" data-reveal>
+        <section id="projects" className="py-16 sm:py-20 lg:py-28 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-28 scroll-mt-24" data-reveal>
           <div className="w-full mx-auto">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-10 gap-6">
               <div>
@@ -977,15 +977,14 @@ export default function App() {
         {/* =========================================================================
             AWARDS & RECOGNITION SECTION
             ========================================================================= */}
-        <section id="awards" className="py-16 sm:py-20 lg:py-28 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-28" data-reveal>
-          <div id="leadership" className="scroll-mt-28" />
+        <section id="awards" className="py-16 sm:py-20 lg:py-28 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-28 scroll-mt-24" data-reveal>
           <div className="w-full mx-auto">
             <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
               <div className="section-kicker justify-center">
-                <i /> RECOGNITION & HONORS
+                <i /> HONORS &amp; AWARDS
               </div>
               <h2 className="section-title">
-                Awards & <span className="gradient-crimson-text">Leadership.</span>
+                Recognition &amp; <span className="gradient-crimson-text">Achievements.</span>
               </h2>
               <p className="text-xs sm:text-sm text-zinc-400 mt-3 sm:mt-4 leading-relaxed font-normal">
                 Milestones earned through technical hackathons, institutional leadership, and commitment to educational mentorship.
@@ -1043,7 +1042,7 @@ export default function App() {
         {/* =========================================================================
             SKILLS & TECH STACK SECTION (Exact Reference Photo Layout)
             ========================================================================= */}
-        <section id="skills" className="py-16 sm:py-20 lg:py-28 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-28" data-reveal>
+        <section id="skills" className="py-16 sm:py-20 lg:py-28 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-28 scroll-mt-24" data-reveal>
           <div className="w-full mx-auto">
             <SkillsTechStack />
           </div>
@@ -1054,7 +1053,7 @@ export default function App() {
         {/* =========================================================================
             EXPERIENCE & EDUCATION TIMELINE
             ========================================================================= */}
-        <section id="experience" className="py-16 sm:py-20 lg:py-28 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-28" data-reveal>
+        <section id="experience" className="py-16 sm:py-20 lg:py-28 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-28 scroll-mt-24" data-reveal>
           <div className="w-full max-w-[1800px] mx-auto">
             <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
               <div className="section-kicker justify-center">
@@ -1294,7 +1293,7 @@ export default function App() {
         {/* =========================================================================
             CONTACT SECTION
             ========================================================================= */}
-        <section id="contact" className="py-16 sm:py-20 lg:py-28 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-28 relative" data-reveal>
+        <section id="contact" className="py-16 sm:py-20 lg:py-28 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-28 relative scroll-mt-24" data-reveal>
           <div className="w-full mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
               {/* Left Contact Details */}
@@ -1481,7 +1480,7 @@ export default function App() {
               <a href="#top" className="hover:text-white transition-colors">Home</a>
               <a href="#services" className="hover:text-white transition-colors">Services</a>
               <a href="#projects" className="hover:text-white transition-colors">Projects</a>
-              <a href="#awards" className="hover:text-white transition-colors">Awards</a>
+              <a href="#awards" className="hover:text-white transition-colors">Recognition</a>
               <a href="#skills" className="hover:text-white transition-colors">Skills</a>
               <a href="#experience" className="hover:text-white transition-colors">Experience</a>
               <a href="#contact" className="hover:text-white transition-colors">Contact</a>
